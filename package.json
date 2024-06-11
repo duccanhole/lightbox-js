@@ -1,0 +1,17 @@
+{
+  "name": "lightbox-js",
+  "version": "0.0.1",
+  "description": "the fast, simple lightbox in javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lightbox",
+    "javascript",
+    "js",
+    "file-viewer"
+  ],
+  "author": "Canh Duc",
+  "license": "ISC"
+}
