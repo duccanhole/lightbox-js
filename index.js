@@ -1,21 +1,41 @@
+const containerTemplate =
+`
+<div class="lightbox-container" style="display: block">
+  <div class="lightbox-action-container">
+    <button
+      id="lightbox-action-download"
+      class="lightbox-action-btn"
+    ></button>
+    <button
+      id="lightbox-action-rotate"
+      class="lightbox-action-btn"
+    ></button>
+    <button id="lightbox-action-zoom" class="lightbox-action-btn"></button>
+    <button id="lightbox-action-reset" class="lightbox-action-btn"></button>
+    <button id="lightbox-action-close" class="lightbox-action-btn"></button>
+  </div>
+  <div class="lightbox-content"></div>
+  <div class="lightbox-pagination">
+    <button id="lightbox-pagination-prev" class="lightbox-pagination-btn"></button>
+    <button id="lightbox-pagination-next" class="lightbox-pagination-btn"></button>
+  </div>
+  <div class="lightbox-gallery"></div>
+</div>
+`
 class Lightbox {
   #modalContainer
   #isOpen = false
   constructor() {
-    this.#modalContainer = this.#getElement("div", "modal-container", "modal-container", {
-      display: "none"
-    })
+    this.#initContainer()
   }
-  #getElement(tag, id, className, style) {
-    let el = document.getElementById(id)
-    if (el) return el 
-    else {
-      el = document.createElement(tag)
-      el.id = id
-      el.className = className
-      el.style = style
-      return el
-    }
+  #initContainer() {
+    const el = document.createElement('div')
+    el.style.display = 'none'
+    el.className = 'modal-container'
+    el.innerHTML = 
+    `
+
+    `
   }
 
   open(){
