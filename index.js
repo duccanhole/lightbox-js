@@ -1,6 +1,6 @@
 const containerTemplate =
-`
-<div class="lightbox-container" style="display: block">
+  `
+<!--<div class="lightbox-container" style="display: block">-->
   <div class="lightbox-action-container">
     <button
       id="lightbox-action-download"
@@ -14,40 +14,54 @@ const containerTemplate =
     <button id="lightbox-action-reset" class="lightbox-action-btn"></button>
     <button id="lightbox-action-close" class="lightbox-action-btn"></button>
   </div>
-  <div class="lightbox-content"></div>
+  <div id="lightbox-content" class="lightbox-content">
+    <div></div>
+  </div>
   <div class="lightbox-pagination">
     <button id="lightbox-pagination-prev" class="lightbox-pagination-btn"></button>
     <button id="lightbox-pagination-next" class="lightbox-pagination-btn"></button>
   </div>
   <div class="lightbox-gallery"></div>
-</div>
+<!--</div>-->
 `
 class Lightbox {
   #modalContainer
-  #isOpen = false
+  #closeBtn
   constructor() {
     this.#initContainer()
+    this.#initAction()
   }
   #initContainer() {
-    const el = document.createElement('div')
+    let el = document.getElementById('lightbox')
+    if (!el) {
+      el = document.createElement('div')
+      el.className = 'lightbox-container'
+      el.innerHTML = containerTemplate
+    }
     el.style.display = 'none'
-    el.className = 'modal-container'
-    el.innerHTML = 
-    `
-
-    `
+    this.#modalContainer = el
+    document.body.appendChild(el)
+  }
+  #initAction(){
+    this.#closeBtn = document.getElementById('lightbox-action-close')
+    this.#closeBtn.onclick = () => {
+      this.#modalContainer.style.display = 'none'
+    }
   }
 
-  open(){
+  open(url) {
+    const content = document.getElementById("lightbox-content")
+    const contentContainer = content.querySelector('div')
+    contentContainer.style['background-image'] = `url(${url})`
     this.#modalContainer.style.display = "block"
-    this.#modalContainer.onclick = this.close
-    document.body.appendChild(this.#modalContainer)
+    // this.#modalContainer.onclick = this.close
+    // document.body.appendChild(this.#modalContainer)
   }
-  close() {
-    console.log("click ...");
-    this.#modalContainer.style.display = "none"
-    document.body.removeChild(this.#modalContainer)
-  }
+  // close() {
+  //   console.log("click ...");
+  //   this.#modalContainer.style.display = "none"
+  //   document.body.removeChild(this.#modalContainer)
+  // }
 }
 
 // function lightboxOpen(){
