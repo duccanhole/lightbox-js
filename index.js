@@ -27,6 +27,11 @@ const containerTemplate =
 class Lightbox {
   #modalContainer
   #closeBtn
+  #rotateBtn
+  #zoomBtn
+
+  #degRotate = 0
+  #zoomSize = 1
   constructor() {
     this.#initContainer()
     this.#initAction()
@@ -47,9 +52,28 @@ class Lightbox {
     this.#closeBtn.onclick = () => {
       this.#modalContainer.style.display = 'none'
     }
+    this.#rotateBtn = document.getElementById('lightbox-action-rotate')
+    this.#rotateBtn.onclick = () => {
+      this.#degRotate += 90
+      if(this.#degRotate > 360) this.#degRotate = 90
+      const content = document.getElementById("lightbox-content")
+      const contentContainer = content.querySelector('div')
+      contentContainer.style.transform = `rotate(${this.#degRotate}deg)`
+    }
+    this.#zoomBtn = document.getElementById('lightbox-action-zoom')
+    this.#zoomBtn.onclick = () => {
+      this.#zoomSize ++;
+      if(this.#zoomSize > 5) return
+        const content = document.getElementById("lightbox-content")
+      console.log('zoom: '+this.#zoomSize);
+      const contentContainer = content.querySelector('div')
+      contentContainer.style.transform = `scale(${this.#zoomSize})`
+    } 
   }
 
   open(url) {
+    this.#degRotate = 0
+    this.#zoomSize = 1
     const content = document.getElementById("lightbox-content")
     const contentContainer = content.querySelector('div')
     contentContainer.style['background-image'] = `url(${url})`

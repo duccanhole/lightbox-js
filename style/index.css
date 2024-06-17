@@ -49,17 +49,18 @@
   margin-bottom: 10px;
   display: grid;
   place-items: center;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 /* WAY 1: render image as background */
 .lightbox-content > div {
-  width: 350px;
+  width: 500px;
   height: 100%;
   /* background-image: url("https://picsum.photos/600"); */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   overflow: hidden;
+  transition: ease;
 }
 /* WAY 2: render use img tag */
 /* .lightbox-content > div {
