@@ -26,9 +26,11 @@ const containerTemplate =
 `
 class Lightbox {
   #modalContainer
+
   #closeBtn
   #rotateBtn
   #zoomBtn
+  #resetBtn
 
   #degRotate = 0
   #zoomSize = 1
@@ -49,31 +51,45 @@ class Lightbox {
   }
   #initAction(){
     this.#closeBtn = document.getElementById('lightbox-action-close')
-    this.#closeBtn.onclick = () => {
-      this.#modalContainer.style.display = 'none'
-    }
+    this.#closeBtn.onclick = () => this.#onClose()
+
     this.#rotateBtn = document.getElementById('lightbox-action-rotate')
     this.#rotateBtn.onclick = () => {
       this.#degRotate += 90
       if(this.#degRotate > 360) this.#degRotate = 90
-      const content = document.getElementById("lightbox-content")
-      const contentContainer = content.querySelector('div')
-      contentContainer.style.transform = `rotate(${this.#degRotate}deg)`
+      this.#onRotate(this.#degRotate)
     }
     this.#zoomBtn = document.getElementById('lightbox-action-zoom')
     this.#zoomBtn.onclick = () => {
       this.#zoomSize ++;
       if(this.#zoomSize > 5) return
-        const content = document.getElementById("lightbox-content")
-      console.log('zoom: '+this.#zoomSize);
-      const contentContainer = content.querySelector('div')
-      contentContainer.style.transform = `scale(${this.#zoomSize})`
+      this.#onZoom(this.#zoomSize)
     } 
+    this.#resetBtn = document.getElementById('lightbox-action-reset')
+    this.#resetBtn.onclick = () => {
+      this.#zoomSize = 1
+      this.#onZoom(this.#zoomSize)
+    }
+  }
+
+  #onClose() {
+    this.#modalContainer.style.display = 'none'
+  }
+
+  #onRotate(deg = 0) {
+    this.#degRotate = deg
+    const content = document.getElementById("lightbox-content")
+    const contentContainer = content.querySelector('div')
+    contentContainer.style.transform = `rotate(${this.#degRotate}deg)`
+  }
+  #onZoom(size = 1) {
+    this.#zoomSize = size
+    const content = document.getElementById("lightbox-content")
+    const contentContainer = content.querySelector('div')
+    contentContainer.style.transform = `scale(${this.#zoomSize})`
   }
 
   open(url) {
-    this.#degRotate = 0
-    this.#zoomSize = 1
     const content = document.getElementById("lightbox-content")
     const contentContainer = content.querySelector('div')
     contentContainer.style['background-image'] = `url(${url})`
@@ -81,24 +97,6 @@ class Lightbox {
     // this.#modalContainer.onclick = this.close
     // document.body.appendChild(this.#modalContainer)
   }
-  // close() {
-  //   console.log("click ...");
-  //   this.#modalContainer.style.display = "none"
-  //   document.body.removeChild(this.#modalContainer)
-  // }
 }
-
-// function lightboxOpen(){
-//   if(!document.getElementById("modal-container")) {
-//     const modalContainer = document.createElement('div')
-//     modalContainer.className = "modal-container"
-//     modalContainer.id = "modal-container"
-//     modalContainer.style.display = "block"
-//     modalContainer.onclick = () => {
-//       modalContainer.style.display = "none"
-//     }
-//     document.body.appendChild(modalContainer)
-//   }
-// }
 
 export default Lightbox
