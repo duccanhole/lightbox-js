@@ -12,6 +12,7 @@ const containerTemplate =
     ></button>
     <button id="lightbox-action-zoom" class="lightbox-action-btn"></button>
     <button id="lightbox-action-reset" class="lightbox-action-btn"></button>
+    <button id="lightbox-action-gallery" class="lightbox-action-btn"></button>
     <button id="lightbox-action-close" class="lightbox-action-btn"></button>
   </div>
   <div id="lightbox-content" class="lightbox-content">
@@ -24,6 +25,7 @@ const containerTemplate =
   <div class="lightbox-gallery"></div>
 <!--</div>-->
 `
+// todos: lazy loading image
 class Lightbox {
   #modalContainer
 
@@ -34,6 +36,11 @@ class Lightbox {
 
   #degRotate = 0
   #zoomSize = 1
+
+  #startX
+  #startY
+  #endX
+  #endY
   constructor() {
     this.#initContainer()
     this.#initAction()
@@ -70,6 +77,10 @@ class Lightbox {
       this.#zoomSize = 1
       this.#onZoom(this.#zoomSize)
     }
+
+    const content = document.getElementById("lightbox-content")
+    const contentContainer = content.querySelector('div')
+    contentContainer.onmousedown = (e) => this.#onSwipe(e)
   }
 
   #onClose() {
@@ -89,9 +100,45 @@ class Lightbox {
     contentContainer.style.transform = `scale(${this.#zoomSize})`
   }
 
+  #onSwipe(e){
+    this.#startX = e.clientX;
+      this.#startY = e.clientY;
+    
+      const mouseMoveHandler = (e) => {
+        this.#endX = e.clientX;
+        this.#endY = e.clientY;
+      };
+    
+      const mouseUpHandler = (e) => {
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+        
+        const dx = this.#endX - this.#startX;
+        const dy = this.#endY - this.#startY;
+        console.log(dx, dy);
+        if (Math.abs(dx) > Math.abs(dy)) {
+          if (dx > 0) {
+            console.log('Swipe Right');
+          } else {
+            console.log('Swipe Left');
+          }
+        } else {
+          if (dy > 0) {
+            console.log('Swipe Down');
+          } else {
+            console.log('Swipe Up');
+          }
+        }
+      };
+    
+      document.addEventListener('mousemove', mouseMoveHandler);
+      document.addEventListener('mouseup', mouseUpHandler);
+  }
+
   open(url) {
     const content = document.getElementById("lightbox-content")
     const contentContainer = content.querySelector('div')
+    contentContainer.setAttribute('data-src', url)
     contentContainer.style['background-image'] = `url(${url})`
     this.#modalContainer.style.display = "block"
     // this.#modalContainer.onclick = this.close

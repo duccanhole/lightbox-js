@@ -40,6 +40,9 @@
 #lightbox-action-rotate::after {
   content: "↻";
 }
+#lightbox-action-gallery::after {
+  content: "▦";
+}
 /* CONTENT */
 .lightbox-content {
   width: 100%;
