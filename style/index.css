@@ -41,7 +41,7 @@
   content: "↻";
 }
 #lightbox-action-gallery::after {
-  content: "▦";
+  content: "::";
 }
 /* CONTENT */
 .lightbox-content {

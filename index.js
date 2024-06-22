@@ -85,7 +85,7 @@ class Lightbox {
       this.#onZoom(this.#zoomSize)
     }
     this.#resetBtn = document.getElementById('lightbox-action-reset')
-    this.#resetBtn.onclick = () => this.#onReset()
+    this.#resetBtn.onclick = () => this.#onZoom()
 
     this.#contentContainer.onwheel = (e) => {
       if (e.deltaY < 0) {
