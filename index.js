@@ -42,10 +42,11 @@ class Lightbox {
   #zoomSize = 1
 
   // Swipe detect
-  #startX
-  #startY
-  #endX
-  #endY
+  #startX = 0
+  #startY = 0
+  #endX = 0
+  #endY = 0
+  #isPanning = false
 
   // Move position
   #positionX = 0
@@ -84,13 +85,10 @@ class Lightbox {
       this.#onZoom(this.#zoomSize)
     }
     this.#resetBtn = document.getElementById('lightbox-action-reset')
-    this.#resetBtn.onclick = () => {
-      this.#zoomSize = 1
-      this.#onZoom(this.#zoomSize)
-    }
+    this.#resetBtn.onclick = () => this.#onReset()
 
     this.#contentContainer.onwheel = (e) => {
-      if(e.deltaY < 0) {
+      if (e.deltaY < 0) {
         this.#zoomSize ++;
         this.#onZoom(this.#zoomSize)
       }
@@ -100,6 +98,29 @@ class Lightbox {
     }
 
     // this.#contentContainer.onmousedown = (e) => this.#onSwipe(e)
+    this.#contentContainer.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      if (this.#zoomSize > 1) {
+        this.#startX = e.clientX - this.#endX;
+        this.#startY = e.clientY - this.#endY;
+        this.#isPanning = true;
+        this.#contentContainer.style.cursor = 'grabbing';
+      }
+    });
+
+    this.#contentContainer.addEventListener('mousemove', (e) => {
+      if (!this.#isPanning || this.#zoomSize <= 1) return;
+      this.#endX = e.clientX - this.#startX;
+      this.#endY = e.clientY - this.#startY;
+      this.#contentContainer.style.transform = `scale(${this.#zoomSize}) rotate(${this.#degRotate}deg) translate(${this.#endX}px, ${this.#endY}px)`;
+    });
+
+    this.#contentContainer.addEventListener('mouseup', () => {
+      if (this.#zoomSize > 1) {
+        this.#isPanning = false;
+        this.#contentContainer.style.cursor = 'grab';
+      }
+    });
   }
 
   #onClose() {
@@ -108,64 +129,76 @@ class Lightbox {
 
   #onRotate(deg = 0) {
     this.#degRotate = deg
-    this.#contentContainer.style.transform = `scale(${this.#zoomSize}) rotate(${this.#degRotate}deg) translate(${this.#positionX}%, ${this.#positionY}%)`
+    this.#contentContainer.style.transform = `scale(${this.#zoomSize}) rotate(${this.#degRotate}deg) translate(${this.#endX}px, ${this.#endY}px)`;
   }
   #onZoom(size = 1) {
-    if(size >= 5 || size === this.#zoomSize) return
+    if (size >= 5) return
     this.#zoomSize = size
-    this.#contentContainer.style.transform = `scale(${this.#zoomSize}) rotate(${this.#degRotate}deg) translate(${this.#positionX}%, ${this.#positionY}%)`
+    this.#contentContainer.style.transform = `scale(${this.#zoomSize}) rotate(${this.#degRotate}deg) translate(${this.#endX}px, ${this.#endY}px)`;
+  }
+  #onReset() {
+    this.#zoomSize = 1
+    this.#degRotate = 0
+    this.#endX = 0
+    this.#endY = 0
+    this.#isPanning = false
+    this.#startX = 0
+    this.#startY = 0
+    this.#contentContainer.style.transform = `scale(${this.#zoomSize}) rotate(${this.#degRotate}deg) translate(${this.#endX}px, ${this.#endY}px)`;
+
   }
 
-  #onMoveImage(x = 50, y = 50) {
-    if (x >= 0 && x <= 100) this.#positionX = x
-    if (y >= 0 && y <= 100) this.#positionY = y
-    this.#contentContainer.style.transform = `scale(${this.#zoomSize}) rotate(${this.#degRotate}deg) translate(${this.#positionX}%, ${this.#positionY}%)`
-  }
-  #onSwipe(e) {
-    this.#startX = e.clientX;
-    this.#startY = e.clientY;
+  // #onMoveImage(x = 50, y = 50) {
+  //   if (x >= 0 && x <= 100) this.#positionX = x
+  //   if (y >= 0 && y <= 100) this.#positionY = y
+  //   this.#contentContainer.style.transform = `scale(${this.#zoomSize}) rotate(${this.#degRotate}deg) translate(${this.#positionX}%, ${this.#positionY}%)`
+  // }
+  // #onSwipe(e) {
+  //   this.#startX = e.clientX;
+  //   this.#startY = e.clientY;
 
-    const mouseMoveHandler = (e) => {
-      this.#endX = e.clientX;
-      this.#endY = e.clientY;
-    };
+  //   const mouseMoveHandler = (e) => {
+  //     this.#endX = e.clientX;
+  //     this.#endY = e.clientY;
+  //   };
 
-    const mouseUpHandler = (e) => {
-      document.removeEventListener('mousemove', mouseMoveHandler);
-      document.removeEventListener('mouseup', mouseUpHandler);
+  //   const mouseUpHandler = (e) => {
+  //     document.removeEventListener('mousemove', mouseMoveHandler);
+  //     document.removeEventListener('mouseup', mouseUpHandler);
 
-      const dx = this.#endX - this.#startX;
-      const dy = this.#endY - this.#startY;
-      console.log(dx, dy);
-      if (Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 0) {
-          console.log('Swipe Right');
-          this.#positionX -= 20
-        } else {
-          console.log('Swipe Left');
-          this.#positionX += 20
-        }
-      } else {
-        if (dy > 0) {
-          this.#positionY -= 20
-          console.log('Swipe Down');
-        } else {
-          this.#positionY += 20
-          console.log('Swipe Up');
-        }
-      }
-      if (this.#zoomSize > 1) this.#onMoveImage(this.#positionX, this.#positionY)
-    };
+  //     const dx = this.#endX - this.#startX;
+  //     const dy = this.#endY - this.#startY;
+  //     console.log(dx, dy);
+  //     if (Math.abs(dx) > Math.abs(dy)) {
+  //       if (dx > 0) {
+  //         console.log('Swipe Right');
+  //         this.#positionX -= 20
+  //       } else {
+  //         console.log('Swipe Left');
+  //         this.#positionX += 20
+  //       }
+  //     } else {
+  //       if (dy > 0) {
+  //         this.#positionY -= 20
+  //         console.log('Swipe Down');
+  //       } else {
+  //         this.#positionY += 20
+  //         console.log('Swipe Up');
+  //       }
+  //     }
+  //     if (this.#zoomSize > 1) this.#onMoveImage(this.#positionX, this.#positionY)
+  //   };
 
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler);
-  }
+  //   document.addEventListener('mousemove', mouseMoveHandler);
+  //   document.addEventListener('mouseup', mouseUpHandler);
+  // }
 
   open(url) {
     const content = document.getElementById("lightbox-content")
     const contentContainer = content.querySelector('div')
     contentContainer.setAttribute('data-src', url)
     contentContainer.style['background-image'] = `url(${url})`
+    this.#onReset()
     this.#modalContainer.style.display = "block"
     // this.#modalContainer.onclick = this.close
     // document.body.appendChild(this.#modalContainer)
