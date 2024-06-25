@@ -156,7 +156,7 @@ class Lightbox {
   }
 
   #updateTransform() {
-    this.#contentContainer.style.transform = `scale(${this.#zoomSize}) rotate(${this.#degRotate}deg) translate(${this.#endX}px, ${this.#endY}px)`;
+    this.#contentContainer.style.transform = `scale(${this.#zoomSize}) translate(${this.#endX}px, ${this.#endY}px) rotate(${this.#degRotate}deg)`;
   }
 
   open(url) {
