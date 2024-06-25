@@ -41,16 +41,12 @@ class Lightbox {
   #degRotate = 0
   #zoomSize = 1
 
-  // Swipe detect
+  // Mouse detect
   #startX = 0
   #startY = 0
   #endX = 0
   #endY = 0
   #isPanning = false
-
-  // Move position
-  #positionX = 0
-  #positionY = 0
   constructor() {
     this.#initContainer()
     this.#initAction()
