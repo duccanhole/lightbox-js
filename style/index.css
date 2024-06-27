@@ -43,12 +43,15 @@
 #lightbox-action-gallery::after {
   content: "::";
 }
+#lightbox-gallery-btn::after {
+  content: "::";
+}
 /* CONTENT */
 .lightbox-content {
   width: 100%;
-  height: 500px;
+  height: 90%;
   margin-top: 10px;
-  background-color: black;
+  /* background-color: black; */
   margin-bottom: 10px;
   display: grid;
   place-items: center;
@@ -56,7 +59,7 @@
 }
 /* WAY 1: render image as background */
 .lightbox-content > div {
-  width: 500px;
+  width: 80%;
   height: 100%;
   /* background-image: url("https://picsum.photos/600"); */
   background-size: contain;
@@ -64,7 +67,7 @@
   background-position: center;
   overflow: hidden;
   transition: ease;
-  transition-duration: 300ms;
+  transition-duration: 150ms;
 }
 /* WAY 2: render use img tag */
 /* .lightbox-content > div {
@@ -98,4 +101,57 @@
 }
 #lightbox-pagination-next::after {
   content: "\203A";
+}
+/* BOTTOM */
+.lightbox-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.lightbox-gallery-container {
+  padding: 5px;
+  background-color: black;
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  gap: 10px;
+  justify-items: center;
+  align-items: center;
+  overflow-y: scroll;
+}
+.lightbox-gallery-item {
+  width: 100%;
+  height: 75px;
+  border: 3px solid grey;
+  border-radius: 5px;
+  background-color: aqua;
+  cursor: pointer;
+  justify-self: center;
+  align-self: center;
+}
+.lightbox-gallery-action {
+  display: flex;
+  justify-content: end;
+}
+.lightbox-gallery-btn{
+  border: none;
+  color: white;
+  background-color: black;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  font-size: x-large;
+}
+
+@media screen and (max-width: 770px) {
+  .lightbox-gallery-container {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+@media screen and (max-width: 1025px) {
+  .lightbox-gallery-container {
+    grid-template-columns: repeat(10, 1fr);
+  }
 }
