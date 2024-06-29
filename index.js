@@ -1,6 +1,6 @@
 const containerTemplate =
   `
-<!--<div class="lightbox-container" style="display: block">-->
+<!--<div id="lightbox-modal" class="lightbox-container" style="display: block">-->
   <div class="lightbox-action-container">
     <button
       id="lightbox-action-download"
@@ -16,20 +16,13 @@ const containerTemplate =
     <button id="lightbox-action-close" class="lightbox-action-btn"></button>
   </div>
   <div id="lightbox-content" class="lightbox-content">
-    <div></div>
-  </div>
-  <div class="lightbox-pagination">
-    <button id="lightbox-pagination-prev" class="lightbox-pagination-btn"></button>
-    <button id="lightbox-pagination-next" class="lightbox-pagination-btn"></button>
-  </div>
-  <div class="lightbox-gallery"></div>
 <!--</div>-->
 `
 // todos: lazy loading image
 class Lightbox {
   // Element
   #modalContainer
-  #contentContainer
+  #imageContainer
 
   // Action
   #closeBtn
@@ -60,14 +53,18 @@ class Lightbox {
       document.body.appendChild(el)
     }
     el.style.display = 'none'
-    const contentEl = document.getElementById("lightbox-content")
-    this.#contentContainer = contentEl.querySelector('div')
+    // this.imageContainer = document.getElementById('lightbox-image-container')
+    // const contentEl = document.getElementById("lightbox-content")
+    // this.#contentContainer = contentEl.querySelector('div')
     this.#modalContainer = el
   }
   #initAction() {
     this.#closeBtn = document.getElementById('lightbox-action-close')
     this.#closeBtn.onclick = () => this.#onClose()
+  }
 
+  #initImageAction() {
+    this.#imageContainer = document.getElementById('lightbox-image-container')
     this.#rotateBtn = document.getElementById('lightbox-action-rotate')
     this.#rotateBtn.onclick = () => {
       this.#degRotate += 90
@@ -87,7 +84,7 @@ class Lightbox {
       this.#onZoom()
     }
 
-    this.#contentContainer.onwheel = (e) => {
+    this.#imageContainer.onwheel = (e) => {
       if (e.deltaY < 0) {
         this.#zoomSize ++;
         this.#onZoom(this.#zoomSize)
@@ -97,13 +94,13 @@ class Lightbox {
       }
     }
 
-    this.#contentContainer.onmousedown = (e) => {
+    this.#imageContainer.onmousedown = (e) => {
       e.preventDefault();
       if (this.#zoomSize > 1 || this.#endX + this.#endY !== 0) {
         this.#startX = e.clientX - this.#endX;
         this.#startY = e.clientY - this.#endY;
         this.#isPanning = true;
-        this.#contentContainer.style.cursor = 'grabbing';
+        this.#imageContainer.style.cursor = 'grabbing';
       }
     };
 
@@ -118,12 +115,39 @@ class Lightbox {
 
     elBox.onmouseup = () => {
       this.#isPanning = false;
-      this.#contentContainer.style.cursor = this.#zoomSize > 1 ? 'grab' : 'default';
+      this.#imageContainer.style.cursor = this.#zoomSize > 1 ? 'grab' : 'default';
     };
 
     elBox.onmouseleave = () => {
       this.#isPanning = false
-      this.#contentContainer.style.cursor = this.#zoomSize > 1 ? 'grab' : 'default';
+      this.#imageContainer.style.cursor = this.#zoomSize > 1 ? 'grab' : 'default';
+    }
+
+    this.#imageContainer.ontouchstart = (e) => {
+      if(e.touches.length === 1 && this.#zoomSize > 1 ) {
+        const touch = e.touches[0]
+        this.#startX = touch.clientX - this.#endX;
+        this.#startY = touch.clientY - this.#endY;
+        this.#isPanning = true;
+      }
+    }
+
+    elBox.ontouchmove = (e) => {
+      if(!this.#isPanning) return
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        this.#endX = touch.clientX - this.#startX
+        this.#endY = touch.clientY - this.#startY
+        this.#updateTransform(0)
+      }
+    }
+
+    elBox.ontouchend = (e) => {
+      this.#isPanning = false
+    }
+
+    elBox.ontouchcancel = (e) => {
+      this.#isPanning = false
     }
   }
 
@@ -152,16 +176,44 @@ class Lightbox {
   }
 
   #updateTransform() {
-    this.#contentContainer.style.transform = `scale(${this.#zoomSize}) translate(${this.#endX}px, ${this.#endY}px) rotate(${this.#degRotate}deg)`;
+    const el = document.getElementById('lightbox-image-container')
+    el.style.transform = `scale(${this.#zoomSize}) translate(${this.#endX}px, ${this.#endY}px) rotate(${this.#degRotate}deg)`;
   }
 
-  open(url) {
-    const content = document.getElementById("lightbox-content")
-    const contentContainer = content.querySelector('div')
-    contentContainer.setAttribute('data-src', url)
-    contentContainer.style['background-image'] = `url(${url})`
-    this.#onReset()
-    this.#modalContainer.style.display = "block"
+  open(data) {
+    const { type } = data
+    let shouldOpen = true
+    const contentContainer = document.getElementById('lightbox-content')
+    switch (type) {
+      case "image":
+        contentContainer.replaceChildren()
+        const imageContainer = document.createElement('div')
+        imageContainer.id = "lightbox-image-container"
+        imageContainer.setAttribute('data-src', data.url)
+        imageContainer.className = 'lightbox-image-container'
+        imageContainer.style['background-image'] = `url(${data.url})`
+        contentContainer.appendChild(imageContainer)
+
+        this.#initImageAction()
+        this.#onReset()
+        break;
+
+      default:
+        shouldOpen = false
+        break;
+    }
+    if (shouldOpen) {
+      this.#modalContainer.style.display = "block"
+    }
+    else {
+      console.error("Type is not valid");
+    }
+    // const content = document.getElementById("lightbox-content")
+    // const contentContainer = content.querySelector('div')
+    // contentContainer.setAttribute('data-src', url)
+    // contentContainer.style['background-image'] = `url(${url})`
+    // this.#onReset()
+    // this.#modalContainer.style.display = "block"
     // this.#modalContainer.onclick = this.close
     // document.body.appendChild(this.#modalContainer)
   }

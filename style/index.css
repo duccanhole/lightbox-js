@@ -8,6 +8,8 @@
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+  transition: ease;
+  transition-duration: 250ms;
 }
 /* ACTION */
 .lightbox-action-container {
@@ -32,7 +34,7 @@
 }
 #lightbox-action-reset::after {
   content: "1:1";
-  font-size: smaller;
+  font-size: x-small;
 }
 #lightbox-action-close::after {
   content: "×";
@@ -58,7 +60,7 @@
   overflow: hidden;
 }
 /* WAY 1: render image as background */
-.lightbox-content > div {
+.lightbox-image-container {
   width: 80%;
   height: 100%;
   /* background-image: url("https://picsum.photos/600"); */
@@ -79,6 +81,14 @@
   width: 100%;
   object-fit: contain;
 } */
+.lightbox-video-container {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+}
+.lightbox-video-container > video {
+  max-width: 500px;
+}
 /* PAGINATION */
 .lightbox-pagination {
   display: flex;
@@ -112,7 +122,7 @@
   padding: 5px;
   background-color: black;
   display: grid;
-  grid-template-columns: repeat(15, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   justify-items: center;
   align-items: center;
@@ -127,12 +137,16 @@
   cursor: pointer;
   justify-self: center;
   align-self: center;
+  background-image: url("https://picsum.photos/600");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .lightbox-gallery-action {
   display: flex;
   justify-content: end;
 }
-.lightbox-gallery-btn{
+.lightbox-gallery-btn {
   border: none;
   color: white;
   background-color: black;
@@ -144,14 +158,20 @@
   font-size: x-large;
 }
 
-@media screen and (max-width: 770px) {
+@media screen and (min-width: 640px) {
+  .lightbox-gallery-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media screen and (min-width: 768px) {
   .lightbox-gallery-container {
     grid-template-columns: repeat(7, 1fr);
   }
 }
 
-@media screen and (max-width: 1025px) {
+@media screen and (min-width: 1024px) {
   .lightbox-gallery-container {
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(12, 1fr);
   }
 }
