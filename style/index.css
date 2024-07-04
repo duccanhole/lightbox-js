@@ -117,10 +117,13 @@
   cursor: pointer;
   justify-self: center;
   align-self: center;
-  background-image: url("https://picsum.photos/600");
+  /* background-image: url("https://picsum.photos/600"); */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+.lightbox-gallery-item-selected {
+  border: 3px solid white;
 }
 .lightbox-gallery-action {
   display: flex;

@@ -5,6 +5,7 @@ const containerTemplate =
     <button
       id="lightbox-action-download"
       class="lightbox-action-btn"
+      style="display: none"
     >
       <svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
         <path d="M480-322.87 268.52-534.35l63.89-65.41L434.5-497.44v-310.69h91v310.69l102.09-102.32 63.89 65.41L480-322.87Zm-237.13 171q-37.78 0-64.39-26.61t-26.61-64.39v-120h91v120h474.26v-120h91v120q0 37.78-26.61 64.39t-64.39 26.61H242.87Z"/>
@@ -41,7 +42,7 @@ const containerTemplate =
     </button>
   </div>
   <div id="lightbox-content" class="lightbox-content"></div>
-  <div id="lighbox-bottom" class="lightbox-bottom">
+  <div id="lighbox-bottom" class="lightbox-bottom" style="display: none">
     <div class="lightbox-gallery-action">
       <button id="lightbox-gallery-btn" class="lightbox-gallery-btn">
         <svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
@@ -49,8 +50,8 @@ const containerTemplate =
         </svg>
       </button>
     </div>
-    <div class="lightbox-gallery-container">
-      <div class="lightbox-gallery-item"></div>
+    <div id="lightbox-gallery-container" class="lightbox-gallery-container">
+      <!-- <div class="lightbox-gallery-item"></div> -->
     </div>
   </div>
 <!--</div>-->
@@ -80,6 +81,9 @@ class Lightbox {
   #isPanning = false
 
   #downloadUrl = null
+
+  #galleryList = []
+  #itemSelected = -1
   constructor() {
     this.#initContainer()
     this.#initAction()
@@ -173,7 +177,7 @@ class Lightbox {
     }
 
     this.#imageContainer.ontouchstart = (e) => {
-      if(e.touches.length === 1 && this.#zoomSize > 1 ) {
+      if (e.touches.length === 1 && this.#zoomSize > 1) {
         const touch = e.touches[0]
         this.#startX = touch.clientX - this.#endX;
         this.#startY = touch.clientY - this.#endY;
@@ -182,7 +186,7 @@ class Lightbox {
     }
 
     elBox.ontouchmove = (e) => {
-      if(!this.#isPanning) return
+      if (!this.#isPanning) return
       if (e.touches.length === 1) {
         const touch = e.touches[0];
         this.#endX = touch.clientX - this.#startX
@@ -200,7 +204,7 @@ class Lightbox {
     }
   }
 
-  #initGalleryAction(){
+  #initGalleryAction() {
     const topAction = document.getElementById('lightbox-action-gallery')
     const bottomAction = document.getElementById('lightbox-gallery-btn')
     const galleryContainer = document.getElementById('lighbox-bottom')
@@ -272,9 +276,9 @@ class Lightbox {
         video.controls = true
         video.style.width = '100%'
 
-        for(const s of data.sources) {
+        for (const s of data.sources) {
           const source = document.createElement('source')
-          source.src = s.src 
+          source.src = s.src
           source.type = s.type
           video.appendChild(source)
         }
@@ -285,8 +289,11 @@ class Lightbox {
         shouldOpen = false
         break;
     }
-    if (shouldOpen) {
+    if (downloadUrl) {
       this.#downloadUrl = downloadUrl
+      this.#downloadBtn.style.display = 'block'
+    }
+    if (shouldOpen) {
       this.#modalContainer.style.display = "block"
     }
     else {
@@ -294,9 +301,40 @@ class Lightbox {
     }
   }
 
-  setGallery(list){}
+  #initGalleryItemAction(){
+    const container = document.getElementById('lightbox-gallery-container')
+    const listEl = container.querySelectorAll('.lightbox-gallery-item')
+    for(let i=0; i<listEl.length; i++) {
+      listEl[i].onclick = () => {
+        if(i !== this.#itemSelected) {
+          this.#itemSelected = i
+          listEl[i].classList.add('lightbox-gallery-item-selected')
+          listEl.forEach((item, index) => {
+            if(index !== i) {
+              item.classList.remove('lightbox-gallery-item-selected')
+            }
+          })
+        }
+      }
+    }
+  }
 
-  openAt(){}
+  setGallery(list) {
+    this.#galleryList = list
+    const container = document.getElementById('lightbox-gallery-container')
+    container.replaceChildren()
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i]
+      const elItem = document.createElement('div')
+      elItem.setAttribute('data-src', item.thumbnail)
+      elItem.className = "lightbox-gallery-item"
+      elItem.style.backgroundImage = `url(${item.thumbnail})`
+      container.appendChild(elItem)
+    }
+    this.#initGalleryItemAction()
+  }
+
+  openAt() { }
 }
 
 export default Lightbox
