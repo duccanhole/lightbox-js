@@ -105,8 +105,8 @@ const containerTemplate =
   </div>
 <!--</div>-->
 `
-const playIcon = 
-`
+const playIcon =
+  `
 <svg
   xmlns="http://www.w3.org/2000/svg"
   height="50px"
@@ -119,8 +119,8 @@ const playIcon =
   />
 </svg>
 `
-const soundIcon = 
-`
+const soundIcon =
+  `
 <svg 
   xmlns="http://www.w3.org/2000/svg" 
   height="50px" 
@@ -190,10 +190,13 @@ class Lightbox {
   }
 
   #initImageAction() {
+    const galleryContainer = document.getElementById('lighbox-bottom')
+
     this.#imageContainer = document.getElementById('lightbox-image-container')
     this.#rotateBtn = document.getElementById('lightbox-action-rotate')
     this.#rotateBtn.style.display = "block"
     this.#rotateBtn.onclick = () => {
+      galleryContainer.style.display = 'none'
       this.#degRotate += 90
       if (this.#degRotate > 360) this.#degRotate = 90
       this.#onRotate(this.#degRotate)
@@ -201,6 +204,7 @@ class Lightbox {
     this.#zoomBtn = document.getElementById('lightbox-action-zoom')
     this.#zoomBtn.style.display = "block"
     this.#zoomBtn.onclick = () => {
+      galleryContainer.style.display = 'none'
       this.#zoomSize ++;
       if (this.#zoomSize > 5) return
       this.#onZoom(this.#zoomSize)
@@ -208,12 +212,14 @@ class Lightbox {
     this.#resetBtn = document.getElementById('lightbox-action-reset')
     this.#resetBtn.style.display = "block"
     this.#resetBtn.onclick = () => {
+      galleryContainer.style.display = 'none'
       this.#endX = 0
       this.#endY = 0
       this.#onZoom()
     }
 
     this.#imageContainer.onwheel = (e) => {
+      galleryContainer.style.display = 'none'
       if (e.deltaY < 0) {
         this.#zoomSize ++;
         this.#onZoom(this.#zoomSize)
@@ -224,6 +230,7 @@ class Lightbox {
     }
 
     this.#imageContainer.onmousedown = (e) => {
+      galleryContainer.style.display = 'none'
       e.preventDefault();
       if (this.#zoomSize > 1 || this.#endX + this.#endY !== 0) {
         this.#startX = e.clientX - this.#endX;
@@ -253,6 +260,7 @@ class Lightbox {
     }
 
     this.#imageContainer.ontouchstart = (e) => {
+      galleryContainer.style.display = 'none'
       if (e.touches.length === 1 && this.#zoomSize > 1) {
         const touch = e.touches[0]
         this.#startX = touch.clientX - this.#endX;
@@ -282,6 +290,7 @@ class Lightbox {
 
   #initGalleryAction() {
     const topAction = document.getElementById('lightbox-action-gallery')
+    topAction.style.display = 'block'
     const galleryContainer = document.getElementById('lighbox-bottom')
 
     topAction.onclick = () => {
@@ -291,14 +300,15 @@ class Lightbox {
 
     const container = document.getElementById('lightbox-gallery-container')
     const listEl = container.querySelectorAll('.lightbox-gallery-item')
-    for(let i=0; i<listEl.length; i++) {
+    for (let i = 0; i < listEl.length; i++) {
       listEl[i].onclick = () => {
-        if(i !== this.#itemSelected) {
+        if (i !== this.#itemSelected) {
           this.#itemSelected = i
           listEl[i].classList.add('lightbox-gallery-item-selected')
+          if(this.#galleryList[i].type === 'iframe') galleryContainer.style.display = 'none'
           this.open(this.#galleryList[i])
           listEl.forEach((item, index) => {
-            if(index !== i) {
+            if (index !== i) {
               item.classList.remove('lightbox-gallery-item-selected')
             }
           })
@@ -338,8 +348,11 @@ class Lightbox {
     el.style.transform = `scale(${this.#zoomSize}) translate(${this.#endX}px, ${this.#endY}px) rotate(${this.#degRotate}deg)`;
   }
 
+  /**
+   * hell
+   */
   open(data) {
-    const { type, downloadUrl, thumbnail } = data
+    const { type, downloadUrl } = data
     let shouldOpen = true
     const contentContainer = document.getElementById('lightbox-content')
     contentContainer.replaceChildren()
@@ -356,9 +369,9 @@ class Lightbox {
         this.#onReset()
         break;
       case "video":
-        if(this.#rotateBtn) this.#rotateBtn.style.display = "none"
-        if(this.#zoomBtn) this.#zoomBtn.style.display = "none"
-        if(this.#resetBtn) this.#resetBtn.style.display = "none"
+        if (this.#rotateBtn) this.#rotateBtn.style.display = "none"
+        if (this.#zoomBtn) this.#zoomBtn.style.display = "none"
+        if (this.#resetBtn) this.#resetBtn.style.display = "none"
 
         const videoContainer = document.createElement('div')
         videoContainer.id = "lightbox-video-container"
@@ -369,23 +382,66 @@ class Lightbox {
         video.controls = true
         video.style.width = '100%'
 
-        if(data.src) video.src = data.src
+        if (data.src) video.src = data.src
 
-        for (const s of data.sources) {
-          const source = document.createElement('source')
-          source.src = s.src
-          source.type = s.type
-          video.appendChild(source)
+        if (Array.isArray(data.sources)) {
+          for (const s of data.sources) {
+            const source = document.createElement('source')
+            source.src = s.src
+            source.type = s.type
+            video.appendChild(source)
+          }
         }
         videoContainer.appendChild(video)
         contentContainer.appendChild(videoContainer)
         break;
-      case "audio": 
-        if(this.#rotateBtn) this.#rotateBtn.style.display = "none"
-        if(this.#zoomBtn) this.#zoomBtn.style.display = "none"
-        if(this.#resetBtn) this.#resetBtn.style.display = "none"
+      case "audio":
+        console.log('open', data);
+        if (this.#rotateBtn) this.#rotateBtn.style.display = "none"
+        if (this.#zoomBtn) this.#zoomBtn.style.display = "none"
+        if (this.#resetBtn) this.#resetBtn.style.display = "none"
 
-        
+        const audioContainer = document.createElement('div')
+
+        const audio = document.createElement('audio')
+        audio.controls = true
+        if (data.src) audio.src = data.src
+
+        if (Array.isArray(data.sources)) {
+          for (const s of data.sources) {
+            const source = document.createElement('source')
+            source.src = s.src
+            source.type = s.type
+            audio.appendChild(source)
+          }
+        }
+        audioContainer.appendChild(audio)
+        contentContainer.appendChild(audioContainer)
+        break
+      case "iframe":
+        if (this.#rotateBtn) this.#rotateBtn.style.display = "none"
+        if (this.#zoomBtn) this.#zoomBtn.style.display = "none"
+        if (this.#resetBtn) this.#resetBtn.style.display = "none"
+
+        const iframeContainer = document.createElement('div')
+        iframeContainer.style.width = '100%'
+        iframeContainer.style.height = '100%'
+
+        const iframe = document.createElement('iframe')
+        iframe.style.border = 'none'
+        iframe.style.width = '100%'
+        iframe.style.height = '100%'
+        iframe.src = data.src
+
+        iframeContainer.appendChild(iframe)
+        contentContainer.appendChild(iframeContainer)
+        break;
+      case "custom":
+        if (this.#rotateBtn) this.#rotateBtn.style.display = "none"
+        if (this.#zoomBtn) this.#zoomBtn.style.display = "none"
+        if (this.#resetBtn) this.#resetBtn.style.display = "none"
+
+        contentContainer.innerHTML = data.template
         break
       default:
         shouldOpen = false
@@ -412,14 +468,14 @@ class Lightbox {
       const elItem = document.createElement('div')
       elItem.setAttribute('data-src', item.thumbnail)
       elItem.className = "lightbox-gallery-item"
-      if(list[i].type === 'video') {
+      if (list[i].type === 'video') {
         const videoIcon = document.createElement('span')
         videoIcon.innerHTML = playIcon
         elItem.appendChild(videoIcon)
       }
       else if (
         list[i].type === 'audio'
-      ){
+      ) {
         const audioIcon = document.createElement('span')
         audioIcon.innerHTML = soundIcon
         elItem.appendChild(audioIcon)
@@ -430,7 +486,16 @@ class Lightbox {
     this.#initGalleryAction()
   }
 
-  openAt() { }
+  openGalleryItem(i) {
+    if (i >= 0 && i < this.#galleryList.length) {
+      const galleryContainer = document.getElementById('lighbox-bottom')
+      const container = document.getElementById('lightbox-gallery-container')
+      const listEl = container.querySelectorAll('.lightbox-gallery-item')
+      listEl[i].classList.add('lightbox-gallery-item-selected')
+      if(this.#galleryList[i].type === 'iframe') galleryContainer.style.display = 'none'
+      this.open(this.#galleryList[i])
+    }
+  }
 }
 
 export default Lightbox

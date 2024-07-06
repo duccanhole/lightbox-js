@@ -1,7 +1,7 @@
 {
   "name": "lightbox-js",
   "version": "0.0.1",
-  "description": "the fast, simple lightbox in javascript",
+  "description": "The fast, simple lightbox package; support different file types; no dependency.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
