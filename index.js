@@ -348,9 +348,6 @@ class Lightbox {
     el.style.transform = `scale(${this.#zoomSize}) translate(${this.#endX}px, ${this.#endY}px) rotate(${this.#degRotate}deg)`;
   }
 
-  /**
-   * hell
-   */
   open(data) {
     const { type, downloadUrl } = data
     let shouldOpen = true
@@ -396,7 +393,6 @@ class Lightbox {
         contentContainer.appendChild(videoContainer)
         break;
       case "audio":
-        console.log('open', data);
         if (this.#rotateBtn) this.#rotateBtn.style.display = "none"
         if (this.#zoomBtn) this.#zoomBtn.style.display = "none"
         if (this.#resetBtn) this.#resetBtn.style.display = "none"
