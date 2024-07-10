@@ -70,7 +70,7 @@ const containerTemplate =
         />
       </svg>
     </button>
-    <button id="lightbox-action-gallery" class="lightbox-action-btn">
+    <button id="lightbox-action-gallery" class="lightbox-action-btn" style="display: none">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         height="100%"
@@ -163,7 +163,6 @@ class Lightbox {
   constructor() {
     this.#initContainer()
     this.#initAction()
-    this.#initGalleryAction()
   }
   #initContainer() {
     let el = document.getElementById('lightbox-js')
@@ -480,7 +479,7 @@ class Lightbox {
       elItem.style.backgroundImage = `url(${item.thumbnail})`
       container.appendChild(elItem)
     }
-    this.#initGalleryAction()
+    if(list.length > 0) this.#initGalleryAction()
   }
 
   openGalleryItem(i) {
