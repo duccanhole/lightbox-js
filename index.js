@@ -166,9 +166,10 @@ class Lightbox {
     this.#initGalleryAction()
   }
   #initContainer() {
-    let el = document.getElementById('lightbox')
+    let el = document.getElementById('lightbox-js')
     if (!el) {
       el = document.createElement('div')
+      el.id = "lightbox-js"
       el.className = 'lightbox-container'
       el.innerHTML = containerTemplate
       document.body.appendChild(el)
