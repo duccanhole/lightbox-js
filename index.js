@@ -349,6 +349,7 @@ class Lightbox {
   }
 
   open(data) {
+    console.log('open ...');
     const { type, downloadUrl } = data
     let shouldOpen = true
     const contentContainer = document.getElementById('lightbox-content')
