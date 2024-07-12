@@ -1,19 +1,19 @@
 # Lightboxjs
 The fast, simple lightbox package; support multiple type of file; no dependency.
 ## Installation
-- NPM
+- **NPM**
 ```bash
 npm install lightbox-js
 ```
-- Yarn
+- **Yarn**
 ```bash
 yarn add lightbox-js
 ```
-- PNPM
+- **PNPM**
 ```bash
 pnpm install lightbox-js
 ```
-- Includes
+- **Includes**
 <br/>Copy javascript file from `index.js` and css file from `style/index.css` to your project
 ```html
 <head>
@@ -32,11 +32,7 @@ pnpm install lightbox-js
 </body>
 ```
 ## Docs
-### API
-* [open](#opendata-idata)
-* [setGallery](#setgallerylist-arrayigalleryitem)
-* [openGalleryItem](#opengalleryitemi-number)
-### `open(data: IData)`
+- **open(data: IData)**
 ```ts
 interface IData {
     type: "image" | "video" | "audio" | "iframe" | "custom"
@@ -52,16 +48,16 @@ interface ISource {
     type: string
 }
 ```
-### `setGallery(list: Array<IGalleryItem>)`
+- **setGallery(list: Array<IGalleryItem>)**
 ```ts
 interface IGalleryItem extends IData {
     thumnail: string // the display thumbnail link
 }
 ```
-### `openGalleryItem(i: number)`
+- **openGalleryItem(i: number)**
 After set gallery list, you can open gallery item with i is index of item in list.
 ## Usage
-- Javascript
+- **Javascript**
 ```javascript
 import Lightbox from "lightbox-js";
 
@@ -72,7 +68,7 @@ lightbox.open({
   downloadUrl: "https://picsum.photos/200/300"
 })
 ```
-- Reactjs
+- **React**
 ```ts
 import "lightbox-js/style/index.css";
 import Lightbox from "lightbox-js";
@@ -103,7 +99,7 @@ export default function Test() {
   );
 }
 ```
-- Vue js
+- **Vue**
 1. Import css file to your project
 ###### `main.ts`
 ```ts
@@ -141,7 +137,7 @@ function openLightbox() {
 }
 </script>
 ```
-- Svelte
+- **Svelte**
 1. Import css file to root css file of your project
 ###### `app.css`
 ```css
