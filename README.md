@@ -55,7 +55,7 @@ interface IGalleryItem extends IData {
 }
 ```
 - **openGalleryItem(i: number)**
-After set gallery list, you can open gallery item with i is index of item in list.
+<br/>After set gallery list, you can open gallery item with i is index of item in list.
 ## Usage
 - **Javascript**
 ```javascript
