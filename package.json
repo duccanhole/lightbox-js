@@ -1,7 +1,7 @@
 {
   "name": "lightbox-js",
   "version": "0.0.1",
-  "description": "The fast, simple lightbox package; support different file types; no dependency.",
+  "description": "The fast and simple lightbox package, support multiple type of file, with no dependency.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,12 @@
     "lightbox",
     "javascript",
     "js",
-    "file-viewer"
+    "file-viewer",
+    "react",
+    "vue",
+    "svelte",
+    "vanilla-javascript",
+    "no-dependency"
   ],
   "author": "Canh Duc",
   "license": "ISC"
