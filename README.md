@@ -1,4 +1,4 @@
-# Lightboxjs
+# Lightbox-js
 The fast and simple lightbox package, support multiple type of file, with no dependency.
 ## Installation
 - **NPM**
@@ -167,4 +167,4 @@ onMount(() => {
 </script>
 ```
 ## Example
-Your can view the demo [here](#opendata-idata)
+Your can view the demo [here](https://duccanhole.github.io/lightbox-js/)
