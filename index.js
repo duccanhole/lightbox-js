@@ -1,5 +1,4 @@
-const containerTemplate =
-  `
+const containerTemplate = `
 <!--<div id="lightbox-modal" class="lightbox-container" style="display: block">-->
   <div class="lightbox-action-container">
     <button
@@ -104,9 +103,8 @@ const containerTemplate =
     </div>
   </div>
 <!--</div>-->
-`
-const playIcon =
-  `
+`;
+const playIcon = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
   height="50px"
@@ -118,9 +116,8 @@ const playIcon =
     d="M320-258v-450q0-14 9.07-22 9.06-8 21.15-8 3.78 0 7.91 1 4.12 1 7.87 3l354 226q7 5 10.5 11t3.5 14q0 8-3.5 14T720-458L366-232q-3.78 2-7.95 3-4.16 1-7.94 1-12.11 0-21.11-8t-9-22Zm60-225Zm0 171 269-171-269-171v342Z"
   />
 </svg>
-`
-const soundIcon =
-  `
+`;
+const soundIcon = `
 <svg 
   xmlns="http://www.w3.org/2000/svg" 
   height="50px" 
@@ -131,370 +128,375 @@ const soundIcon =
     d="M285-270v-420q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v420q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.63-8.5-8.62-8.5-21.37Zm165 160v-740q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v740q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.63Q450-97.25 450-110ZM120-430v-100q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v100q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.63-8.5-8.62-8.5-21.37Zm495 160v-420q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v420q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.63-8.5-8.62-8.5-21.37Zm165-160v-100q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v100q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.63-8.5-8.62-8.5-21.37Z"
   />
 </svg>
-`
+`;
 
 class Lightbox {
   // Element
-  #modalContainer
-  #imageContainer
+  #modalContainer;
+  #imageContainer;
 
   // Action
-  #downloadBtn
-  #closeBtn
-  #rotateBtn
-  #zoomBtn
-  #resetBtn
+  #downloadBtn;
+  #closeBtn;
+  #rotateBtn;
+  #zoomBtn;
+  #resetBtn;
 
   // Zoom, rotate
-  #degRotate = 0
-  #zoomSize = 1
+  #degRotate = 0;
+  #zoomSize = 1;
 
   // Mouse detect
-  #startX = 0
-  #startY = 0
-  #endX = 0
-  #endY = 0
-  #isPanning = false
+  #startX = 0;
+  #startY = 0;
+  #endX = 0;
+  #endY = 0;
+  #isPanning = false;
 
-  #downloadUrl = null
+  #downloadUrl = null;
 
-  #galleryList = []
-  #itemSelected = -1
+  #galleryList = [];
+  #itemSelected = -1;
   constructor() {
-    this.#initContainer()
-    this.#initAction()
+    this.#initContainer();
+    this.#initAction();
   }
   #initContainer() {
-    let el = document.getElementById('lightbox-js')
+    let el = document.getElementById("lightbox-js");
     if (!el) {
-      el = document.createElement('div')
-      el.id = "lightbox-js"
-      el.className = 'lightbox-container'
-      el.innerHTML = containerTemplate
-      document.body.appendChild(el)
+      el = document.createElement("div");
+      el.id = "lightbox-js";
+      el.className = "lightbox-container";
+      el.innerHTML = containerTemplate;
+      document.body.appendChild(el);
     }
-    el.style.display = 'none'
+    el.style.display = "none";
     // this.imageContainer = document.getElementById('lightbox-image-container')
     // const contentEl = document.getElementById("lightbox-content")
     // this.#contentContainer = contentEl.querySelector('div')
-    this.#modalContainer = el
+    this.#modalContainer = el;
   }
   #initAction() {
-    this.#closeBtn = document.getElementById('lightbox-action-close')
-    this.#closeBtn.onclick = () => this.#onClose()
+    this.#closeBtn = document.getElementById("lightbox-action-close");
+    this.#closeBtn.onclick = () => this.#onClose();
 
-    this.#downloadBtn = document.getElementById('lightbox-action-download')
+    this.#downloadBtn = document.getElementById("lightbox-action-download");
     this.#downloadBtn.onclick = () => {
-      window.open(this.#downloadUrl)
-    }
+      window.open(this.#downloadUrl);
+    };
   }
 
   #initImageAction() {
-    const galleryContainer = document.getElementById('lighbox-bottom')
+    const galleryContainer = document.getElementById("lighbox-bottom");
 
-    this.#imageContainer = document.getElementById('lightbox-image-container')
-    this.#rotateBtn = document.getElementById('lightbox-action-rotate')
-    this.#rotateBtn.style.display = "block"
+    this.#imageContainer = document.getElementById("lightbox-image-container");
+    this.#rotateBtn = document.getElementById("lightbox-action-rotate");
+    this.#rotateBtn.style.display = "block";
     this.#rotateBtn.onclick = () => {
-      galleryContainer.style.display = 'none'
-      this.#degRotate += 90
-      if (this.#degRotate > 360) this.#degRotate = 90
-      this.#onRotate(this.#degRotate)
-    }
-    this.#zoomBtn = document.getElementById('lightbox-action-zoom')
-    this.#zoomBtn.style.display = "block"
+      galleryContainer.style.display = "none";
+      this.#degRotate += 90;
+      if (this.#degRotate > 360) this.#degRotate = 90;
+      this.#onRotate(this.#degRotate);
+    };
+    this.#zoomBtn = document.getElementById("lightbox-action-zoom");
+    this.#zoomBtn.style.display = "block";
     this.#zoomBtn.onclick = () => {
-      galleryContainer.style.display = 'none'
-      this.#zoomSize ++;
-      if (this.#zoomSize > 5) return
-      this.#onZoom(this.#zoomSize)
-    }
-    this.#resetBtn = document.getElementById('lightbox-action-reset')
-    this.#resetBtn.style.display = "block"
+      galleryContainer.style.display = "none";
+      this.#zoomSize++;
+      if (this.#zoomSize > 5) return;
+      this.#onZoom(this.#zoomSize);
+    };
+    this.#resetBtn = document.getElementById("lightbox-action-reset");
+    this.#resetBtn.style.display = "block";
     this.#resetBtn.onclick = () => {
-      galleryContainer.style.display = 'none'
-      this.#endX = 0
-      this.#endY = 0
-      this.#onZoom()
-    }
+      galleryContainer.style.display = "none";
+      this.#endX = 0;
+      this.#endY = 0;
+      this.#onZoom();
+    };
 
     this.#imageContainer.onwheel = (e) => {
-      galleryContainer.style.display = 'none'
+      galleryContainer.style.display = "none";
       if (e.deltaY < 0) {
-        this.#zoomSize ++;
-        this.#onZoom(this.#zoomSize)
+        this.#zoomSize++;
+        this.#onZoom(this.#zoomSize);
+      } else {
+        this.#onZoom(1);
       }
-      else {
-        this.#onZoom(1)
-      }
-    }
+    };
 
     this.#imageContainer.onmousedown = (e) => {
-      galleryContainer.style.display = 'none'
+      galleryContainer.style.display = "none";
       e.preventDefault();
       if (this.#zoomSize > 1 || this.#endX + this.#endY !== 0) {
         this.#startX = e.clientX - this.#endX;
         this.#startY = e.clientY - this.#endY;
         this.#isPanning = true;
-        this.#imageContainer.style.cursor = 'grabbing';
+        this.#imageContainer.style.cursor = "grabbing";
       }
     };
 
-    const elBox = document.getElementById('lightbox-content')
+    const elBox = document.getElementById("lightbox-content");
 
     elBox.onmousemove = (e) => {
       if (!this.#isPanning) return;
-      this.#endX = e.clientX - this.#startX
-      this.#endY = e.clientY - this.#startY
-      this.#updateTransform()
+      this.#endX = e.clientX - this.#startX;
+      this.#endY = e.clientY - this.#startY;
+      this.#updateTransform();
     };
 
     elBox.onmouseup = () => {
       this.#isPanning = false;
-      this.#imageContainer.style.cursor = this.#zoomSize > 1 ? 'grab' : 'default';
+      this.#imageContainer.style.cursor =
+        this.#zoomSize > 1 ? "grab" : "default";
     };
 
     elBox.onmouseleave = () => {
-      this.#isPanning = false
-      this.#imageContainer.style.cursor = this.#zoomSize > 1 ? 'grab' : 'default';
-    }
+      this.#isPanning = false;
+      this.#imageContainer.style.cursor =
+        this.#zoomSize > 1 ? "grab" : "default";
+    };
 
     this.#imageContainer.ontouchstart = (e) => {
-      galleryContainer.style.display = 'none'
+      galleryContainer.style.display = "none";
       if (e.touches.length === 1 && this.#zoomSize > 1) {
-        const touch = e.touches[0]
+        const touch = e.touches[0];
         this.#startX = touch.clientX - this.#endX;
         this.#startY = touch.clientY - this.#endY;
         this.#isPanning = true;
       }
-    }
+    };
 
     elBox.ontouchmove = (e) => {
-      if (!this.#isPanning) return
+      if (!this.#isPanning) return;
       if (e.touches.length === 1) {
         const touch = e.touches[0];
-        this.#endX = touch.clientX - this.#startX
-        this.#endY = touch.clientY - this.#startY
-        this.#updateTransform(0)
+        this.#endX = touch.clientX - this.#startX;
+        this.#endY = touch.clientY - this.#startY;
+        this.#updateTransform(0);
       }
-    }
+    };
 
     elBox.ontouchend = (e) => {
-      this.#isPanning = false
-    }
+      this.#isPanning = false;
+    };
 
     elBox.ontouchcancel = (e) => {
-      this.#isPanning = false
-    }
+      this.#isPanning = false;
+    };
   }
 
   #initGalleryAction() {
-    const topAction = document.getElementById('lightbox-action-gallery')
-    topAction.style.display = 'block'
-    const galleryContainer = document.getElementById('lighbox-bottom')
+    const topAction = document.getElementById("lightbox-action-gallery");
+    topAction.style.display = "block";
+    const galleryContainer = document.getElementById("lighbox-bottom");
 
     topAction.onclick = () => {
-      const currDisplay = galleryContainer.style.display
-      galleryContainer.style.display = currDisplay === 'none' ? "block" : 'none'
-    }
+      const currDisplay = galleryContainer.style.display;
+      galleryContainer.style.display =
+        currDisplay === "none" ? "block" : "none";
+    };
 
-    const container = document.getElementById('lightbox-gallery-container')
-    const listEl = container.querySelectorAll('.lightbox-gallery-item')
+    const container = document.getElementById("lightbox-gallery-container");
+    const listEl = container.querySelectorAll(".lightbox-gallery-item");
     for (let i = 0; i < listEl.length; i++) {
       listEl[i].onclick = () => {
         if (i !== this.#itemSelected) {
-          this.#itemSelected = i
-          listEl[i].classList.add('lightbox-gallery-item-selected')
-          if(this.#galleryList[i].type === 'iframe') galleryContainer.style.display = 'none'
-          this.open(this.#galleryList[i])
+          this.#itemSelected = i;
+          listEl[i].classList.add("lightbox-gallery-item-selected");
+          if (this.#galleryList[i].type === "iframe")
+            galleryContainer.style.display = "none";
+          this.open(this.#galleryList[i]);
           listEl.forEach((item, index) => {
             if (index !== i) {
-              item.classList.remove('lightbox-gallery-item-selected')
+              item.classList.remove("lightbox-gallery-item-selected");
             }
-          })
+          });
         }
-      }
+      };
     }
   }
 
   #onClose() {
-    const contentContainer = document.getElementById('lightbox-content')
-    contentContainer.replaceChildren()
-    this.#modalContainer.style.display = 'none'
-    document.body.style.overflow = "auto"
+    const contentContainer = document.getElementById("lightbox-content");
+    contentContainer.replaceChildren();
+    this.#modalContainer.style.display = "none";
+    document.body.style.overflow = "auto";
   }
 
   #onRotate(deg = 0) {
-    this.#degRotate = deg
-    this.#updateTransform()
+    this.#degRotate = deg;
+    this.#updateTransform();
   }
   #onZoom(size = 1) {
-    if (size >= 5) return
-    this.#zoomSize = size
-    this.#updateTransform()
+    if (size >= 5) return;
+    this.#zoomSize = size;
+    this.#updateTransform();
   }
   #onReset() {
-    this.#zoomSize = 1
-    this.#degRotate = 0
-    this.#endX = 0
-    this.#endY = 0
-    this.#isPanning = false
-    this.#startX = 0
-    this.#startY = 0
-    this.#updateTransform()
+    this.#zoomSize = 1;
+    this.#degRotate = 0;
+    this.#endX = 0;
+    this.#endY = 0;
+    this.#isPanning = false;
+    this.#startX = 0;
+    this.#startY = 0;
+    this.#updateTransform();
   }
 
   #updateTransform() {
-    const el = document.getElementById('lightbox-image-container')
-    el.style.transform = `scale(${this.#zoomSize}) translate(${this.#endX}px, ${this.#endY}px) rotate(${this.#degRotate}deg)`;
+    const el = document.getElementById("lightbox-image-container");
+    el.style.transform = `scale(${this.#zoomSize}) translate(${this.#endX}px, ${
+      this.#endY
+    }px) rotate(${this.#degRotate}deg)`;
   }
 
   open(data) {
-    console.log('open ...');
-    const { type, downloadUrl } = data
-    let shouldOpen = true
-    const contentContainer = document.getElementById('lightbox-content')
-    contentContainer.replaceChildren()
+    const { type, downloadUrl } = data;
+    let shouldOpen = true;
+    const contentContainer = document.getElementById("lightbox-content");
+    contentContainer.replaceChildren();
     switch (type) {
       case "image":
-        const imageContainer = document.createElement('div')
-        imageContainer.id = "lightbox-image-container"
-        imageContainer.setAttribute('data-src', data.src)
-        imageContainer.className = 'lightbox-image-container'
-        imageContainer.style['background-image'] = `url(${data.src})`
-        contentContainer.appendChild(imageContainer)
+        const imageContainer = document.createElement("div");
+        imageContainer.id = "lightbox-image-container";
+        imageContainer.setAttribute("data-src", data.src);
+        imageContainer.className = "lightbox-image-container";
+        imageContainer.style["background-image"] = `url(${data.src})`;
+        contentContainer.appendChild(imageContainer);
 
-        this.#initImageAction()
-        this.#onReset()
+        this.#initImageAction();
+        this.#onReset();
         break;
       case "video":
-        if (this.#rotateBtn) this.#rotateBtn.style.display = "none"
-        if (this.#zoomBtn) this.#zoomBtn.style.display = "none"
-        if (this.#resetBtn) this.#resetBtn.style.display = "none"
+        if (this.#rotateBtn) this.#rotateBtn.style.display = "none";
+        if (this.#zoomBtn) this.#zoomBtn.style.display = "none";
+        if (this.#resetBtn) this.#resetBtn.style.display = "none";
 
-        const videoContainer = document.createElement('div')
-        videoContainer.id = "lightbox-video-container"
-        videoContainer.className = 'lightbox-video-container'
+        const videoContainer = document.createElement("div");
+        videoContainer.id = "lightbox-video-container";
+        videoContainer.className = "lightbox-video-container";
 
-        const video = document.createElement('video')
-        video.className = 'lightbox-video'
-        video.controls = true
-        video.style.width = '100%'
+        const video = document.createElement("video");
+        video.className = "lightbox-video";
+        video.controls = true;
+        video.style.width = "100%";
 
-        if (data.src) video.src = data.src
+        if (data.src) video.src = data.src;
 
         if (Array.isArray(data.sources)) {
           for (const s of data.sources) {
-            const source = document.createElement('source')
-            source.src = s.src
-            source.type = s.type
-            video.appendChild(source)
+            const source = document.createElement("source");
+            source.src = s.src;
+            source.type = s.type;
+            video.appendChild(source);
           }
         }
-        videoContainer.appendChild(video)
-        contentContainer.appendChild(videoContainer)
+        videoContainer.appendChild(video);
+        contentContainer.appendChild(videoContainer);
         break;
       case "audio":
-        if (this.#rotateBtn) this.#rotateBtn.style.display = "none"
-        if (this.#zoomBtn) this.#zoomBtn.style.display = "none"
-        if (this.#resetBtn) this.#resetBtn.style.display = "none"
+        if (this.#rotateBtn) this.#rotateBtn.style.display = "none";
+        if (this.#zoomBtn) this.#zoomBtn.style.display = "none";
+        if (this.#resetBtn) this.#resetBtn.style.display = "none";
 
-        const audioContainer = document.createElement('div')
+        const audioContainer = document.createElement("div");
 
-        const audio = document.createElement('audio')
-        audio.controls = true
-        if (data.src) audio.src = data.src
+        const audio = document.createElement("audio");
+        audio.controls = true;
+        if (data.src) audio.src = data.src;
 
         if (Array.isArray(data.sources)) {
           for (const s of data.sources) {
-            const source = document.createElement('source')
-            source.src = s.src
-            source.type = s.type
-            audio.appendChild(source)
+            const source = document.createElement("source");
+            source.src = s.src;
+            source.type = s.type;
+            audio.appendChild(source);
           }
         }
-        audioContainer.appendChild(audio)
-        contentContainer.appendChild(audioContainer)
-        break
+        audioContainer.appendChild(audio);
+        contentContainer.appendChild(audioContainer);
+        break;
       case "iframe":
-        if (this.#rotateBtn) this.#rotateBtn.style.display = "none"
-        if (this.#zoomBtn) this.#zoomBtn.style.display = "none"
-        if (this.#resetBtn) this.#resetBtn.style.display = "none"
+        if (this.#rotateBtn) this.#rotateBtn.style.display = "none";
+        if (this.#zoomBtn) this.#zoomBtn.style.display = "none";
+        if (this.#resetBtn) this.#resetBtn.style.display = "none";
 
-        const iframeContainer = document.createElement('div')
-        iframeContainer.style.width = '100%'
-        iframeContainer.style.height = '100%'
+        const iframeContainer = document.createElement("div");
+        iframeContainer.style.width = "100%";
+        iframeContainer.style.height = "100%";
 
-        const iframe = document.createElement('iframe')
-        iframe.style.border = 'none'
-        iframe.style.width = '100%'
-        iframe.style.height = '100%'
-        iframe.src = data.src
+        const iframe = document.createElement("iframe");
+        iframe.style.border = "none";
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.src = data.src;
 
-        iframeContainer.appendChild(iframe)
-        contentContainer.appendChild(iframeContainer)
+        iframeContainer.appendChild(iframe);
+        contentContainer.appendChild(iframeContainer);
         break;
       case "custom":
-        if (this.#rotateBtn) this.#rotateBtn.style.display = "none"
-        if (this.#zoomBtn) this.#zoomBtn.style.display = "none"
-        if (this.#resetBtn) this.#resetBtn.style.display = "none"
+        if (this.#rotateBtn) this.#rotateBtn.style.display = "none";
+        if (this.#zoomBtn) this.#zoomBtn.style.display = "none";
+        if (this.#resetBtn) this.#resetBtn.style.display = "none";
 
-        contentContainer.innerHTML = data.template
-        break
+        contentContainer.innerHTML = data.template;
+        break;
       default:
-        shouldOpen = false
+        shouldOpen = false;
         break;
     }
     if (downloadUrl) {
-      this.#downloadUrl = downloadUrl
-      this.#downloadBtn.style.display = 'block'
+      this.#downloadUrl = downloadUrl;
+      this.#downloadBtn.style.display = "block";
     }
     if (shouldOpen) {
-      document.body.style.overflow = "hidden"
-      this.#modalContainer.style.display = "block"
-    }
-    else {
+      document.body.style.overflow = "hidden";
+      this.#modalContainer.style.display = "block";
+    } else {
       console.error("Type is not valid");
     }
   }
 
   setGallery(list) {
-    this.#galleryList = list
-    const container = document.getElementById('lightbox-gallery-container')
-    container.replaceChildren()
+    this.#galleryList = list;
+    const container = document.getElementById("lightbox-gallery-container");
+    container.replaceChildren();
     for (let i = 0; i < list.length; i++) {
-      const item = list[i]
-      const elItem = document.createElement('div')
-      elItem.setAttribute('data-src', item.thumbnail)
-      elItem.className = "lightbox-gallery-item"
-      if (list[i].type === 'video') {
-        const videoIcon = document.createElement('span')
-        videoIcon.innerHTML = playIcon
-        elItem.appendChild(videoIcon)
+      const item = list[i];
+      const elItem = document.createElement("div");
+      elItem.setAttribute("data-src", item.thumbnail);
+      elItem.className = "lightbox-gallery-item";
+      if (list[i].type === "video") {
+        const videoIcon = document.createElement("span");
+        videoIcon.innerHTML = playIcon;
+        elItem.appendChild(videoIcon);
+      } else if (list[i].type === "audio") {
+        const audioIcon = document.createElement("span");
+        audioIcon.innerHTML = soundIcon;
+        elItem.appendChild(audioIcon);
       }
-      else if (
-        list[i].type === 'audio'
-      ) {
-        const audioIcon = document.createElement('span')
-        audioIcon.innerHTML = soundIcon
-        elItem.appendChild(audioIcon)
-      }
-      elItem.style.backgroundImage = `url(${item.thumbnail})`
-      container.appendChild(elItem)
+      elItem.style.backgroundImage = `url(${item.thumbnail})`;
+      container.appendChild(elItem);
     }
-    if(list.length > 0) this.#initGalleryAction()
+    if (list.length > 0) this.#initGalleryAction();
+    else {
+      const topAction = document.getElementById("lightbox-action-gallery");
+      topAction.style.display = "none";
+    }
   }
 
   openGalleryItem(i) {
     if (i >= 0 && i < this.#galleryList.length) {
-      const galleryContainer = document.getElementById('lighbox-bottom')
-      const container = document.getElementById('lightbox-gallery-container')
-      const listEl = container.querySelectorAll('.lightbox-gallery-item')
-      listEl[i].classList.add('lightbox-gallery-item-selected')
-      if(this.#galleryList[i].type === 'iframe') galleryContainer.style.display = 'none'
-      this.open(this.#galleryList[i])
+      const galleryContainer = document.getElementById("lighbox-bottom");
+      const container = document.getElementById("lightbox-gallery-container");
+      const listEl = container.querySelectorAll(".lightbox-gallery-item");
+      listEl[i].classList.add("lightbox-gallery-item-selected");
+      if (this.#galleryList[i].type === "iframe")
+        galleryContainer.style.display = "none";
+      this.open(this.#galleryList[i]);
     }
   }
 }
 
-export default Lightbox
+export default Lightbox;
