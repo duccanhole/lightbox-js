@@ -1,5 +1,5 @@
 {
-  "name": "lightbox-js",
+  "name": "@duccanhole/lightbox",
   "version": "0.0.1",
   "description": "The fast and simple lightbox package, support multiple type of file, with no dependency.",
   "main": "index.js",
@@ -18,5 +18,13 @@
     "no-dependency"
   ],
   "author": "Canh Duc",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duccanhole/lightbox-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/duccanhole/lightbox-js/issues"
+  },
+  "homepage": "https://duccanhole.github.io/lightbox-js/"
 }

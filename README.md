@@ -3,15 +3,15 @@ The fast and simple lightbox package, support multiple type of file, with no dep
 ## Installation
 - **NPM**
 ```bash
-npm install lightbox-js
+npm install @duccanhole/lightbox
 ```
 - **Yarn**
 ```bash
-yarn add lightbox-js
+yarn add @duccanhole/lightbox
 ```
 - **PNPM**
 ```bash
-pnpm install lightbox-js
+pnpm install @duccanhole/lightbox
 ```
 - **Includes**
 <br/>Copy or download javascript file from `index.js` and css file from `style/index.css` to your project
@@ -59,7 +59,7 @@ interface IGalleryItem extends IData {
 ## Usage
 - **Javascript**
 ```javascript
-import Lightbox from "lightbox-js";
+import Lightbox from "@duccanhole/lightbox";
 
 const lightbox = new Lightbox();
 lightbox.open({
@@ -70,8 +70,8 @@ lightbox.open({
 ```
 - **React**
 ```ts
-import "lightbox-js/style/index.css";
-import Lightbox from "lightbox-js";
+import "@duccanhole/lightbox/style/index.css";
+import Lightbox from "@duccanhole/lightbox";
 import { useEffect, useState } from "react";
 
 export default function LightboxComponent() {
@@ -103,7 +103,7 @@ export default function LightboxComponent() {
 ###### `main.ts`
 ```ts
 import './assets/main.css'
-import 'lightbox-js/style/index.css'
+import '@duccanhole/lightbox/style/index.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -140,7 +140,7 @@ function openLightbox() {
 1. Import css file to root css file of your project
 ###### `app.css`
 ```css
-@import 'lightbox-js/style/index.css';
+@import '@duccanhole/lightbox/style/index.css';
 ```
 2. In your component, init class and use
 ```ts
@@ -148,7 +148,7 @@ function openLightbox() {
     <button on:click={openLightbox}>Open lightbox</button>
 </div>
 <script>
-import Lightbox from 'lightbox-js'
+import Lightbox from '@duccanhole/lightbox'
 import { onMount } from 'svelte';
 
 let lightbox = null
