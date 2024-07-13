@@ -1,5 +1,5 @@
 # Lightboxjs
-The fast, simple lightbox package; support multiple type of file; no dependency.
+The fast and simple lightbox package, support multiple type of file, with no dependency.
 ## Installation
 - **NPM**
 ```bash
@@ -14,7 +14,7 @@ yarn add lightbox-js
 pnpm install lightbox-js
 ```
 - **Includes**
-<br/>Copy javascript file from `index.js` and css file from `style/index.css` to your project
+<br/>Copy or download javascript file from `index.js` and css file from `style/index.css` to your project
 ```html
 <head>
   <link type="text/css" rel="stylesheet" href="/** link your css file here */" />
@@ -73,9 +73,8 @@ lightbox.open({
 import "lightbox-js/style/index.css";
 import Lightbox from "lightbox-js";
 import { useEffect, useState } from "react";
-import { Button } from "@nextui-org/react";
 
-export default function Test() {
+export default function LightboxComponent() {
   const [lightbox, setLightbox] = useState<any>(null);
 
   const openLightbox = () => {
@@ -94,7 +93,7 @@ export default function Test() {
   }, []);
   return (
     <div className="w-full h-screen bg-white">
-      <Button color="default" className="text-gray-500" onClick={openLightbox}>Open lightbox</Button>
+      <button onClick={openLightbox}>Open lightbox</button>
     </div>
   );
 }

@@ -321,6 +321,7 @@ class Lightbox {
     const contentContainer = document.getElementById('lightbox-content')
     contentContainer.replaceChildren()
     this.#modalContainer.style.display = 'none'
+    document.body.style.overflow = "auto"
   }
 
   #onRotate(deg = 0) {
@@ -449,6 +450,7 @@ class Lightbox {
       this.#downloadBtn.style.display = 'block'
     }
     if (shouldOpen) {
+      document.body.style.overflow = "hidden"
       this.#modalContainer.style.display = "block"
     }
     else {
