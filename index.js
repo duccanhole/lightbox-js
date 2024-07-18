@@ -494,6 +494,7 @@ class Lightbox {
       listEl[i].classList.add("lightbox-gallery-item-selected");
       if (this.#galleryList[i].type === "iframe")
         galleryContainer.style.display = "none";
+      galleryContainer.style.display = "block"
       this.open(this.#galleryList[i]);
     }
   }

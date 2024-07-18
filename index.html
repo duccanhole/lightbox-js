@@ -64,7 +64,12 @@
         Open
       </button>
       <div class="text-lg uppercase mt-2">With gallery</div>
-      <button class="bg-black/90 text-white px-2 rounded-md" onclick="openLightbox('gallery')">Open</button>
+      <button
+        class="bg-black/90 text-white px-2 rounded-md"
+        onclick="openLightbox('gallery')"
+      >
+        Open
+      </button>
       <div class="border-[1px] border-black/90 w-full my-3"></div>
       <a href="#install" class="text-3xl font-bold">Installation</a>
       <ul class="mt-2 list-disc list-inside">
@@ -171,7 +176,7 @@
           break;
       }
       if (type === "gallery") {
-        lightbox.setGallery([
+        const list = [
           {
             type: "image",
             src: "https://picsum.photos/id/1/800/800",
@@ -194,7 +199,7 @@
                 type: "video/mp4",
               },
             ],
-            thumbnail: "https://picsum.photos/id/3/500/500"
+            thumbnail: "https://picsum.photos/id/3/500/500",
           },
           {
             type: "audio",
@@ -206,7 +211,7 @@
                 type: "audio/mpeg",
               },
             ],
-            thumbnail: "https://picsum.photos/id/4/500/500"
+            thumbnail: "https://picsum.photos/id/4/500/500",
           },
           {
             type: "image",
@@ -214,10 +219,11 @@
             thumbnail: "https://picsum.photos/id/5/400/700",
             downloadUrl: "https://picsum.photos/id/5/400/700",
           },
-        ]);
+        ];
+        lightbox.setGallery(list.map((i) => new Array(4).fill(i)).flat());
         lightbox.openGalleryItem(0);
       } else {
-        lightbox.setGallery([])
+        lightbox.setGallery([]);
         lightbox.open(item);
       }
     }
