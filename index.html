@@ -220,7 +220,7 @@
             downloadUrl: "https://picsum.photos/id/5/400/700",
           },
         ];
-        lightbox.setGallery(list.map((i) => new Array(4).fill(i)).flat());
+        lightbox.setGallery(list);
         lightbox.openGalleryItem(0);
       } else {
         lightbox.setGallery([]);
