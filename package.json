@@ -1,6 +1,6 @@
 {
   "name": "@duccanhole/lightbox",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The fast and simple lightbox package, support multiple type of file, with no dependency.",
   "main": "index.js",
   "scripts": {
