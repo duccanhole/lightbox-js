@@ -105,6 +105,7 @@
   background-color: black;
   display: grid;
   grid-template-columns: repeat(auto-fill, 75px);
+  gap: 5px;
   /* display: flex;
   flex-direction: row;
   flex-wrap: wrap;
