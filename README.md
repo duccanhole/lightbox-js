@@ -50,6 +50,29 @@ One-command publish:
 npm run release:patch:publish
 ```
 
+## Publish with GitHub Actions
+
+This repository includes workflow: `.github/workflows/npm-publish.yml`.
+
+Trigger:
+
+- Push a tag like `v0.0.5`
+- Or run manually from `Actions` tab (`workflow_dispatch`)
+
+Required repository secret:
+
+- `NPM_TOKEN`: npm granular token with publish permission for `@duccanhole/lightbox`
+
+Recommended release flow:
+
+```bash
+# 1) Bump version locally
+npm run release:patch
+
+# 2) Push commit + tag
+git push origin main --follow-tags
+```
+
 ## Quick Start (Vanilla JS)
 
 ```js
