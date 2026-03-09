@@ -1,0 +1,29 @@
+You are working in the `lightbox-js` repository.
+
+Project context:
+- This is a small, dependency-free lightbox library.
+- Main runtime file: `index.js`
+- Demo page: `index.html`
+- Styles: `style/index.css`
+
+Code style and constraints:
+- Use plain JavaScript (ES modules), no new runtime dependencies.
+- Preserve public API behavior:
+  - `open(data)`
+  - `setGallery(list)`
+  - `openGalleryItem(i)`
+- Keep changes minimal and focused; avoid broad refactors unless requested.
+- Prefer readable, explicit logic over clever abstractions.
+- Keep browser compatibility reasonable for modern browsers.
+
+When editing:
+- Fix root causes, not only symptoms.
+- Keep UI state transitions consistent when switching media types.
+- Avoid breaking existing demo behavior in `index.html`.
+- If changing behavior, update `README.md` examples/docs accordingly.
+
+Validation checklist:
+- No syntax errors.
+- Image mode still supports rotate/zoom/reset + pan.
+- Non-image modes hide image-only controls.
+- Gallery mode still opens and selects items correctly.

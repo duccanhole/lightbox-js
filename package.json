@@ -3,8 +3,25 @@
   "version": "0.0.2",
   "description": "The fast and simple lightbox package, support multiple type of file, with no dependency.",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "style",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No test specified\"",
+    "pack:check": "npm pack --dry-run",
+    "release:patch": "npm version patch",
+    "release:minor": "npm version minor",
+    "release:major": "npm version major",
+    "publish:npm": "npm publish",
+    "release:patch:publish": "npm version patch && npm publish",
+    "release:minor:publish": "npm version minor && npm publish",
+    "release:major:publish": "npm version major && npm publish"
   },
   "keywords": [
     "lightbox",

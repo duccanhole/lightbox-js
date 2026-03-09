@@ -1,232 +1,481 @@
-<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lightbox-js</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Lightbox.js Demo</title>
     <link rel="stylesheet" href="./style/index.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  </head>
-  <script>
-    hljs.highlightAll();
-  </script>
-  <body class="bg-gray-200">
-    <div class="bg-black text-center text-white py-5">
-      <h3 class="text-5xl font-bold">Lightbox-js</h3>
-      <p class="mt-3">
-        The fast and simple lightbox package, support multiple type of file,
-        with no dependency.
-      </p>
-      <a
-        class="bg-gray-300 px-3 py-2 rounded-md text-black flex flex-row mx-auto mt-3 w-32 justify-center"
-        href="https://github.com/duccanhole/lightbox-js"
-        target="_blank"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="25"
-          viewBox="0 0 25 25"
-        >
-          <path
-            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-          />
-        </svg>
-        <span class="font-bold mx-2">Github</span>
-      </a>
-    </div>
-    <div class="p-3 xl:w-[1024px] mx-auto">
-      <a href="#example" class="text-3xl font-bold my-3">EXAMPLES</a>
-      <div class="text-lg uppercase mt-2">With single file</div>
-      <div class="mb-2">
-        <label for="type">Type</label>
-        <select
-          id="lightbox-type"
-          name="type"
-          class="border-2 border-black/90 rounded-md"
-        >
-          <option value="image" selected>Image</option>
-          <option value="video">Video</option>
-          <option value="audio">Audio</option>
-          <option value="iframe">Iframe</option>
-          <option value="custom">Custom</option>
-        </select>
-      </div>
-      <button
-        class="bg-black/90 text-white px-2 rounded-md"
-        onclick="openLightbox()"
-      >
-        Open
-      </button>
-      <div class="text-lg uppercase mt-2">With gallery</div>
-      <button
-        class="bg-black/90 text-white px-2 rounded-md"
-        onclick="openLightbox('gallery')"
-      >
-        Open
-      </button>
-      <div class="border-[1px] border-black/90 w-full my-3"></div>
-      <a href="#install" class="text-3xl font-bold">Installation</a>
-      <ul class="mt-2 list-disc list-inside">
-        <li>NPM</li>
-        <pre>
-            <code class="language-bash">npm install @duccanhole/lightbox</code>
-        </pre>
-        <li>Yarn</li>
-        <pre>
-            <code class="language-bash">yarn add @duccanhole/lightbox</code>
-        </pre>
-        <li>PNPM</li>
-        <pre>
-            <code class="language-bash">pnpm install @duccanhole/lightbox</code>
-        </pre>
-        <li>Includes</li>
-        <p>
-          Copy or download javascript file from <code>index.js</code> and css
-          file from <code>style/index.css</code> to your project
-        </p>
-        <pre>
-<code class="language-html">
-&lt;head&gt;
-    &lt;link type=&quot;text/css&quot; rel=&quot;stylesheet&quot; href=&quot;/&#42;&#42; link your css file here &#42;/&quot; /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;script type=&quot;module&quot;&gt;
-        import Lightbox from &quot;/&#42;&#42; link your js file here &#42;/&quot;
-        const lightbox = new Lightbox()
-        lightbox.open({
-            type: 'image',
-            src: 'https://picsum.photos/800/800',
-            downloadUrl: 'https://picsum.photos/200/300'
-        })
-    &lt;/script&gt;
-&lt;/body&gt;
-</code>
-        </pre>
-      </ul>
-    </div>
-  </body>
-  <script type="module">
-    import Lightbox from "./index.js";
-
-    const lightbox = new Lightbox();
-    function openLightbox(defaultType) {
-      const selectEl = document.getElementById("lightbox-type");
-      const type = defaultType ?? selectEl.value;
-      let item = null;
-      switch (type) {
-        case "image":
-          item = {
-            type: "image",
-            src: "https://picsum.photos/800/800",
-            downloadUrl: "https://picsum.photos/800/800",
-          };
-          break;
-        case "video":
-          item = {
-            type: "video",
-            downloadUrl:
-              "https://www.taxmann.com/emailer/images/CompaniesAct.mp4",
-            sources: [
-              {
-                src: "https://www.taxmann.com/emailer/images/CompaniesAct.mp4",
-                type: "video/mp4",
-              },
-            ],
-          };
-          break;
-        case "audio":
-          item = {
-            type: "audio",
-            downloadUrl:
-              "https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
-            sources: [
-              {
-                src: "https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
-                type: "audio/mpeg",
-              },
-            ],
-          };
-          break;
-        case "iframe":
-          item = {
-            type: "iframe",
-            thumbnail: "",
-            downloadUrl:
-              "https://www.antennahouse.com/hubfs/xsl-fo-sample/pdf/basic-link-1.pdf",
-            src: "https://www.antennahouse.com/hubfs/xsl-fo-sample/pdf/basic-link-1.pdf",
-          };
-          break;
-        case "custom":
-          item = {
-            type: "custom",
-            thumbnail: "",
-            template: `
-            <div class="w-full h-full text-center bg-white text-black flex flex-col justify-center text-xl">
-                <b>This is custom html</b>
-                <p>Hello, world !</p>
-            </div>
-            `,
-          };
-          break;
+    <style>
+      :root {
+        --bg: #0b1323;
+        --bg-soft: #131f36;
+        --card: rgba(16, 26, 47, 0.82);
+        --text: #f3f6ff;
+        --muted: #aeb8d8;
+        --line: rgba(149, 171, 223, 0.25);
+        --primary: #22d3ee;
+        --primary-strong: #0ea5e9;
+        --accent: #fb7185;
+        --shadow: 0 20px 50px rgba(2, 8, 24, 0.55);
+        --radius: 18px;
       }
-      if (type === "gallery") {
-        const list = [
-          {
-            type: "image",
-            src: "https://picsum.photos/id/1/800/800",
-            thumbnail: "https://picsum.photos/id/1/800/800",
-            downloadUrl: "https://picsum.photos/id/1/800/800",
-          },
-          {
-            type: "image",
-            src: "https://picsum.photos/id/2/500/600",
-            thumbnail: "https://picsum.photos/id/2/500/600",
-            downloadUrl: "https://picsum.photos/id/2/500/600",
-          },
-          {
-            type: "video",
-            downloadUrl:
-              "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            sources: [
-              {
-                src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                type: "video/mp4",
-              },
-            ],
-            thumbnail: "https://picsum.photos/id/3/500/500",
-          },
-          {
-            type: "audio",
-            downloadUrl:
-              "https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3",
-            sources: [
-              {
-                src: "https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3",
-                type: "audio/mpeg",
-              },
-            ],
-            thumbnail: "https://picsum.photos/id/4/500/500",
-          },
-          {
-            type: "image",
-            src: "https://picsum.photos/id/5/400/700",
-            thumbnail: "https://picsum.photos/id/5/400/700",
-            downloadUrl: "https://picsum.photos/id/5/400/700",
-          },
-        ];
-        lightbox.setGallery(list);
-        lightbox.openGalleryItem(0);
-      } else {
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 20% 10%, #18284c 0%, transparent 40%),
+          radial-gradient(circle at 80% 0%, #1d3557 0%, transparent 35%),
+          linear-gradient(180deg, #080e1e 0%, #0b1323 100%);
+      }
+
+      .shell {
+        width: min(1120px, calc(100% - 2rem));
+        margin: 0 auto;
+      }
+
+      .hero {
+        padding: 56px 0 28px;
+        animation: fade-up 420ms ease both;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        font-size: 13px;
+        color: var(--muted);
+        background: rgba(12, 20, 38, 0.72);
+      }
+
+      h1 {
+        margin: 14px 0 10px;
+        font-size: clamp(34px, 6vw, 58px);
+        line-height: 1.03;
+        letter-spacing: -0.02em;
+      }
+
+      .lead {
+        margin: 0;
+        max-width: 760px;
+        color: var(--muted);
+        font-size: clamp(15px, 2.3vw, 19px);
+        line-height: 1.6;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+
+      .btn {
+        border: 0;
+        border-radius: 12px;
+        padding: 11px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 150ms ease,
+          opacity 150ms ease,
+          box-shadow 150ms ease;
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        color: #042134;
+        background: linear-gradient(120deg, var(--primary), #7dd3fc);
+        box-shadow: 0 12px 24px rgba(34, 211, 238, 0.32);
+      }
+
+      .btn-ghost {
+        color: var(--text);
+        border: 1px solid var(--line);
+        background: rgba(18, 30, 54, 0.8);
+      }
+
+      .panel-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 16px;
+        margin: 24px 0 36px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(6px);
+      }
+
+      .demo {
+        padding: 20px;
+        animation: fade-up 540ms ease both;
+      }
+
+      .demo h2,
+      .docs h2 {
+        margin: 0 0 10px;
+        font-size: 20px;
+      }
+
+      .muted {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .controls {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+
+      .select {
+        width: 100%;
+        color: var(--text);
+        border: 1px solid var(--line);
+        background: rgba(9, 18, 36, 0.8);
+        border-radius: 12px;
+        padding: 0 12px;
+        min-height: 42px;
+        font: inherit;
+      }
+
+      .chip-row {
+        margin-top: 14px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .chip {
+        border: 1px solid var(--line);
+        color: var(--muted);
+        background: rgba(8, 14, 28, 0.78);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .chip:hover {
+        color: var(--text);
+        border-color: rgba(100, 229, 255, 0.5);
+      }
+
+      .preview {
+        margin-top: 16px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        min-height: 150px;
+        background: linear-gradient(
+          120deg,
+          rgba(14, 165, 233, 0.16),
+          rgba(251, 113, 133, 0.12)
+        );
+        padding: 14px;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .preview small {
+        color: #d2eafe;
+        line-height: 1.5;
+      }
+
+      .docs {
+        padding: 20px;
+        animation: fade-up 680ms ease both;
+      }
+
+      .code {
+        margin: 12px 0;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: rgba(7, 13, 27, 0.92);
+        padding: 12px;
+        font-family: "JetBrains Mono", Consolas, monospace;
+        color: #cbf6ff;
+        font-size: 13px;
+        overflow-x: auto;
+      }
+
+      .code + .code {
+        margin-top: 8px;
+      }
+
+      .footer {
+        padding: 0 0 36px;
+        color: var(--muted);
+        text-align: center;
+        font-size: 13px;
+      }
+
+      @media (max-width: 900px) {
+        .panel-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .controls {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @keyframes fade-up {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <span class="badge"
+          >⚡ No Dependency • 🎬 Multi Media • 🧩 Vanilla JS</span
+        >
+        <h1>Lightbox.js Demo Playground</h1>
+        <p class="lead">
+          A focused demo page to preview image, video, audio, iframe, custom
+          template, and gallery mode using the same API from the package.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="openLightbox()">
+            Open Selected Type
+          </button>
+          <button class="btn btn-ghost" onclick="openLightbox('gallery')">
+            Launch Gallery
+          </button>
+          <a
+            class="btn btn-ghost"
+            href="https://github.com/duccanhole/lightbox-js"
+            target="_blank"
+            rel="noopener noreferrer"
+            >View GitHub</a
+          >
+        </div>
+      </section>
+
+      <section class="panel-grid">
+        <article class="card demo">
+          <h2>Interactive Controls</h2>
+          <p class="muted">
+            Choose a file type and open it immediately in the lightbox.
+          </p>
+          <div class="controls">
+            <select
+              id="lightbox-type"
+              name="type"
+              class="select"
+              title="Lightbox Type"
+            >
+              <option value="image" selected>Image</option>
+              <option value="video">Video</option>
+              <option value="audio">Audio</option>
+              <option value="iframe">Iframe</option>
+              <option value="custom">Custom Template</option>
+            </select>
+            <button class="btn btn-primary" onclick="openLightbox()">
+              Open
+            </button>
+          </div>
+          <div class="chip-row">
+            <button class="chip" onclick="openLightbox('image')">Image</button>
+            <button class="chip" onclick="openLightbox('video')">Video</button>
+            <button class="chip" onclick="openLightbox('audio')">Audio</button>
+            <button class="chip" onclick="openLightbox('iframe')">
+              Iframe
+            </button>
+            <button class="chip" onclick="openLightbox('custom')">
+              Custom
+            </button>
+          </div>
+          <div class="preview">
+            <small>
+              Tip: in image mode, try rotate/zoom/reset, then switch to another
+              type to validate control state cleanup.
+            </small>
+          </div>
+        </article>
+
+        <article class="card docs">
+          <h2>Quick Install</h2>
+          <p class="muted">Use one of the commands below.</p>
+          <pre class="code">npm install @duccanhole/lightbox</pre>
+          <pre class="code">yarn add @duccanhole/lightbox</pre>
+          <pre class="code">pnpm install @duccanhole/lightbox</pre>
+          <p class="muted">Then import css + class in your app:</p>
+          <pre class="code">
+import "@duccanhole/lightbox/style/index.css";
+import Lightbox from "@duccanhole/lightbox";
+
+const lightbox = new Lightbox();</pre
+          >
+        </article>
+      </section>
+
+      <p class="footer">
+        Made by <a href="https://github.com/duccanhole" style="color: white;" target="_blank" rel="noopener noreferrer">Canh Duc</a>.
+      </p>
+    </main>
+
+    <script type="module">
+      import Lightbox from "./index.js";
+
+      const lightbox = new Lightbox();
+
+      function openLightbox(defaultType) {
+        const selectEl = document.getElementById("lightbox-type");
+        const type = defaultType ?? selectEl.value;
+        let item = null;
+
+        switch (type) {
+          case "image":
+            item = {
+              type: "image",
+              src: "https://picsum.photos/1000/700",
+              downloadUrl: "https://picsum.photos/1000/700",
+            };
+            break;
+          case "video":
+            item = {
+              type: "video",
+              downloadUrl:
+                "https://www.taxmann.com/emailer/images/CompaniesAct.mp4",
+              sources: [
+                {
+                  src: "https://www.taxmann.com/emailer/images/CompaniesAct.mp4",
+                  type: "video/mp4",
+                },
+              ],
+            };
+            break;
+          case "audio":
+            item = {
+              type: "audio",
+              downloadUrl:
+                "https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
+              sources: [
+                {
+                  src: "https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
+                  type: "audio/mpeg",
+                },
+              ],
+            };
+            break;
+          case "iframe":
+            item = {
+              type: "iframe",
+              src: "https://www.antennahouse.com/hubfs/xsl-fo-sample/pdf/basic-link-1.pdf",
+              downloadUrl:
+                "https://www.antennahouse.com/hubfs/xsl-fo-sample/pdf/basic-link-1.pdf",
+            };
+            break;
+          case "custom":
+            item = {
+              type: "custom",
+              template: `
+                <div style="
+                  width: 100%;
+                  height: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-direction: column;
+                  color: #111827;
+                  background: linear-gradient(130deg, #ecfeff 0%, #fce7f3 100%);
+                  font-family: Space Grotesk, Avenir Next, Segoe UI, sans-serif;
+                  text-align: center;
+                  padding: 20px;
+                ">
+                  <h3 style="margin: 0; font-size: 34px">Custom HTML Template</h3>
+                  <p style="margin: 10px 0 0; font-size: 16px; opacity: 0.78">Embed any markup as a custom type in Lightbox.</p>
+                </div>
+              `,
+            };
+            break;
+        }
+
+        if (type === "gallery") {
+          const list = [
+            {
+              type: "image",
+              src: "https://picsum.photos/id/1069/900/700",
+              thumbnail: "https://picsum.photos/id/1069/300/220",
+              downloadUrl: "https://picsum.photos/id/1069/900/700",
+            },
+            {
+              type: "image",
+              src: "https://picsum.photos/id/1015/900/700",
+              thumbnail: "https://picsum.photos/id/1015/300/220",
+              downloadUrl: "https://picsum.photos/id/1015/900/700",
+            },
+            {
+              type: "video",
+              downloadUrl:
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+              sources: [
+                {
+                  src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                  type: "video/mp4",
+                },
+              ],
+              thumbnail: "https://picsum.photos/id/1011/300/220",
+            },
+            {
+              type: "audio",
+              downloadUrl:
+                "https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3",
+              sources: [
+                {
+                  src: "https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3",
+                  type: "audio/mpeg",
+                },
+              ],
+              thumbnail: "https://picsum.photos/id/1025/300/220",
+            },
+            {
+              type: "image",
+              src: "https://picsum.photos/id/1041/900/700",
+              thumbnail: "https://picsum.photos/id/1041/300/220",
+              downloadUrl: "https://picsum.photos/id/1041/900/700",
+            },
+          ];
+
+          lightbox.setGallery(list);
+          lightbox.openGalleryItem(0);
+          return;
+        }
+
         lightbox.setGallery([]);
         lightbox.open(item);
       }
-    }
-    window.openLightbox = openLightbox;
-  </script>
+
+      window.openLightbox = openLightbox;
+    </script>
+  </body>
 </html>

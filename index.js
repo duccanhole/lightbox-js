@@ -202,26 +202,21 @@ class Lightbox {
     this.#zoomBtn.style.display = "block";
     this.#zoomBtn.onclick = () => {
       galleryContainer.style.display = "none";
-      this.#zoomSize++;
-      if (this.#zoomSize > 5) return;
-      this.#onZoom(this.#zoomSize);
+      this.#onZoom(this.#zoomSize + 1);
     };
     this.#resetBtn = document.getElementById("lightbox-action-reset");
     this.#resetBtn.style.display = "block";
     this.#resetBtn.onclick = () => {
       galleryContainer.style.display = "none";
-      this.#endX = 0;
-      this.#endY = 0;
-      this.#onZoom();
+      this.#onReset();
     };
 
     this.#imageContainer.onwheel = (e) => {
       galleryContainer.style.display = "none";
       if (e.deltaY < 0) {
-        this.#zoomSize++;
-        this.#onZoom(this.#zoomSize);
+        this.#onZoom(this.#zoomSize + 1);
       } else {
-        this.#onZoom(1);
+        this.#onZoom(this.#zoomSize - 1);
       }
     };
 
@@ -329,7 +324,8 @@ class Lightbox {
     this.#updateTransform();
   }
   #onZoom(size = 1) {
-    if (size >= 5) return;
+    if (size < 1) size = 1;
+    if (size > 5) size = 5;
     this.#zoomSize = size;
     this.#updateTransform();
   }
@@ -346,6 +342,7 @@ class Lightbox {
 
   #updateTransform() {
     const el = document.getElementById("lightbox-image-container");
+    if (!el) return;
     el.style.transform = `scale(${this.#zoomSize}) translate(${this.#endX}px, ${
       this.#endY
     }px) rotate(${this.#degRotate}deg)`;
@@ -355,27 +352,34 @@ class Lightbox {
     const { type, downloadUrl } = data;
     let shouldOpen = true;
     const contentContainer = document.getElementById("lightbox-content");
+    const galleryContainer = document.getElementById("lighbox-bottom");
     contentContainer.replaceChildren();
+    if (galleryContainer && this.#galleryList.length === 0)
+      galleryContainer.style.display = "none";
+
+    if (this.#downloadBtn) this.#downloadBtn.style.display = "none";
+    this.#downloadUrl = null;
+
+    if (this.#rotateBtn) this.#rotateBtn.style.display = "none";
+    if (this.#zoomBtn) this.#zoomBtn.style.display = "none";
+    if (this.#resetBtn) this.#resetBtn.style.display = "none";
     switch (type) {
       case "image":
         const imageContainer = document.createElement("div");
         imageContainer.id = "lightbox-image-container";
         imageContainer.setAttribute("data-src", data.src);
-        imageContainer.className = "lightbox-image-container";
+        imageContainer.className = "lightbox-image-container lightbox-item-enter";
         imageContainer.style["background-image"] = `url(${data.src})`;
         contentContainer.appendChild(imageContainer);
 
         this.#initImageAction();
         this.#onReset();
+        if (data.transform) this.transform(data.transform);
         break;
       case "video":
-        if (this.#rotateBtn) this.#rotateBtn.style.display = "none";
-        if (this.#zoomBtn) this.#zoomBtn.style.display = "none";
-        if (this.#resetBtn) this.#resetBtn.style.display = "none";
-
         const videoContainer = document.createElement("div");
         videoContainer.id = "lightbox-video-container";
-        videoContainer.className = "lightbox-video-container";
+        videoContainer.className = "lightbox-video-container lightbox-item-enter";
 
         const video = document.createElement("video");
         video.className = "lightbox-video";
@@ -396,11 +400,8 @@ class Lightbox {
         contentContainer.appendChild(videoContainer);
         break;
       case "audio":
-        if (this.#rotateBtn) this.#rotateBtn.style.display = "none";
-        if (this.#zoomBtn) this.#zoomBtn.style.display = "none";
-        if (this.#resetBtn) this.#resetBtn.style.display = "none";
-
         const audioContainer = document.createElement("div");
+        audioContainer.className = "lightbox-item-enter";
 
         const audio = document.createElement("audio");
         audio.controls = true;
@@ -418,11 +419,8 @@ class Lightbox {
         contentContainer.appendChild(audioContainer);
         break;
       case "iframe":
-        if (this.#rotateBtn) this.#rotateBtn.style.display = "none";
-        if (this.#zoomBtn) this.#zoomBtn.style.display = "none";
-        if (this.#resetBtn) this.#resetBtn.style.display = "none";
-
         const iframeContainer = document.createElement("div");
+        iframeContainer.className = "lightbox-item-enter";
         iframeContainer.style.width = "100%";
         iframeContainer.style.height = "100%";
 
@@ -436,11 +434,12 @@ class Lightbox {
         contentContainer.appendChild(iframeContainer);
         break;
       case "custom":
-        if (this.#rotateBtn) this.#rotateBtn.style.display = "none";
-        if (this.#zoomBtn) this.#zoomBtn.style.display = "none";
-        if (this.#resetBtn) this.#resetBtn.style.display = "none";
-
-        contentContainer.innerHTML = data.template;
+        const customContainer = document.createElement("div");
+        customContainer.className = "lightbox-item-enter";
+        customContainer.style.width = "100%";
+        customContainer.style.height = "100%";
+        customContainer.innerHTML = data.template;
+        contentContainer.appendChild(customContainer);
         break;
       default:
         shouldOpen = false;
@@ -464,8 +463,9 @@ class Lightbox {
     container.replaceChildren();
     for (let i = 0; i < list.length; i++) {
       const item = list[i];
+      const thumbnail = item.thumbnail ?? item.thumnail;
       const elItem = document.createElement("div");
-      elItem.setAttribute("data-src", item.thumbnail);
+      elItem.setAttribute("data-src", thumbnail || "");
       elItem.className = "lightbox-gallery-item";
       if (list[i].type === "video") {
         const videoIcon = document.createElement("span");
@@ -476,7 +476,7 @@ class Lightbox {
         audioIcon.innerHTML = soundIcon;
         elItem.appendChild(audioIcon);
       }
-      elItem.style.backgroundImage = `url(${item.thumbnail})`;
+      if (thumbnail) elItem.style.backgroundImage = `url(${thumbnail})`;
       container.appendChild(elItem);
     }
     if (list.length > 0) this.#initGalleryAction();
@@ -491,10 +491,16 @@ class Lightbox {
       const galleryContainer = document.getElementById("lighbox-bottom");
       const container = document.getElementById("lightbox-gallery-container");
       const listEl = container.querySelectorAll(".lightbox-gallery-item");
-      listEl[i].classList.add("lightbox-gallery-item-selected");
-      if (this.#galleryList[i].type === "iframe")
+      this.#itemSelected = i;
+      listEl.forEach((item, index) => {
+        if (index === i) item.classList.add("lightbox-gallery-item-selected");
+        else item.classList.remove("lightbox-gallery-item-selected");
+      });
+      if (this.#galleryList[i].type === "iframe") {
         galleryContainer.style.display = "none";
-      galleryContainer.style.display = "block"
+      } else {
+        galleryContainer.style.display = "block";
+      }
       this.open(this.#galleryList[i]);
     }
   }
